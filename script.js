@@ -1,15 +1,16 @@
-const signUpButton=document.getElementById('signUpButton');
-const logInButton = document.getElementById('logInButton');
-const logInForm = document.getElementById('login');
-const signUpForm = document.getElementById('signup');
+const eyeIcon = document.getElementById('eye');
+const passwordField = document.getElementById('password');
 
-signUpButton.addEventListener('click',function(){
-    logInForm.style.display="none";
-    signUpForm.style.display="block";
-})
-logInButton.addEventListener('click', function(){
-    logInForm.style.display="block";
-    signUpForm.style.display="none";
-})
+eyeIcon.addEventListener('click', () => {
+    if (passwordField.type === "password" && passwordField.value) {
+        passwordField.type = "text";
+        eyeIcon.classList.remove('fa-eye');
+        eyeIcon.classList.add('fa-eye-slash');
+    } else {
+        passwordField.type = "password";
+        eyeIcon.classList.remove('fa-eye-slash');
+        eyeIcon.classList.add('fa-eye');
+    }
+});
 
 
