@@ -6,9 +6,12 @@
     --text-color: #2C3E50;           /* Dark blue-grey */
     --error-bg: #FFE8EC;
     --error-text: #D63649;
+    --success-bg: #E8FFEB;
+    --success-text: #2ECC71;
     --hover-color: #FF7AA2;
     --shadow-color: rgba(0, 0, 0, 0.15);
     --transition-speed: 0.3s;
+
 }
 
 /* Base Styles */
@@ -147,6 +150,16 @@ body::before {
 .links a:hover {
     color: var(--primary-color);
     text-decoration: underline;
+}
+
+.success-main {
+    background-color: var(--success-bg); /* Light green background */
+    color: var(--success-text); /* Green text */
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-size: 0.95rem;
 }
 
 /* Error Message */
