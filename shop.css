@@ -1,0 +1,221 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+
+}
+.content h1{
+    font-family: 'Diphylleia', sans-serif;
+    font-size: 5rem;
+    color:#ec667b;
+}
+
+.shop {
+    background-image: url("composition/backgr.jpg");
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 439px;
+    text-align: center;
+    color: #333;
+    position: relative;
+}
+
+.banner::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.8);
+    z-index: 1;
+}
+
+.content {
+    position: relative;
+    z-index: 2;
+}
+
+
+
+.breadcrumb {
+    font-size: 1.2em;
+    color: #666;
+}
+
+.breadcrumb a {
+    text-decoration: none;
+    color: #333;
+}
+
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+/*product section*/
+.product .box-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px; /* Equal spacing between boxes */
+    margin: 31px;
+}
+
+.product .box-container .box {
+    width: 280px; /* Fixed width to prevent layout shifts */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    border: 1px solid #eee;
+    text-align: center;
+    background: #fff;
+    overflow: hidden;
+    position: relative;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.product .box-container .box:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Discount Label */
+.product .box-container .box .discount {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 5px 10px;
+    font-size: 14px;
+    color: #fff;
+    background: #f76c6c;
+    border-radius: 5px;
+    z-index: 2;
+}
+
+/* Product Image */
+.product .box-container .box .image {
+    position: relative;
+    margin: 20px auto 10px;
+    height: 200px;
+    width: 200px;
+    overflow: hidden;
+    border-radius: 5px;
+}
+
+.product .box-container .box .image img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+}
+
+.product .box-container .box:hover .image img {
+    transform: scale(1.1);
+}
+
+/* Add to Cart and Icons */
+.product .box-container .box .image .icons {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.7);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.product .box-container .box:hover .image .icons {
+    opacity: 1;
+}
+
+.product .box-container .box .image .icons a {
+    width: 33.33%;
+    text-align: center;
+    color: white;
+    padding: 10px;
+    font-size: 10px;
+    text-decoration: none;
+    background: none;
+    transition: background 0.3s;
+}
+
+.product .box-container .box .image .icons .cart-btn {
+    font-weight: bold;
+    background: #4caf50;
+    color: white;
+    border-radius: 0 0 5px 5px; /* Rounded corners for the bottom */
+    width: 100%; /* Make it span across */
+    margin: 0;
+}
+
+.product .box-container .box .image .icons a:hover {
+    background: #e05555;
+}
+
+.product .box-container .box .image .icons .cart-btn:hover {
+    background: #3e8e41;
+}
+
+/* Product Details */
+.product .box-container .box .content {
+    padding: 15px 10px;
+}
+
+.product .box-container .box .content h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.product .box-container .box .content .price {
+    font-size: 18px;
+    font-weight: bold;
+    color: #f76c6c;
+}
+
+.product .box-container .box .content .price span {
+    font-size: 14px;
+    color: #aaa;
+    text-decoration: line-through;
+    margin-left: 5px;
+}
+
+/*next button*/
+.pagination-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0;
+    font-family: Arial, sans-serif;
+}
+
+.pagination {
+    display: flex;
+    gap: 5px;
+}
+
+.page {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    color: #555;
+    border-radius: 4px;
+}
+
+.page.active {
+    background-color: #f24e95; /* Pink for active page */
+    color: #fff;
+    border: none;
+}
+
+.page:hover {
+    background-color: #ddd;
+}
+
+.results-info {
+    color: #666;
+    font-size: 14px;
+}
