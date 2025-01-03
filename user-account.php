@@ -75,8 +75,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
         $mail->isSMTP();
         $mail->Host = 'smtp.example.com'; // Update with your SMTP server
         $mail->SMTPAuth = true;
-        $mail->Username = 'your_email@example.com'; // Your email
-        $mail->Password = 'your_password'; // Your email password
+        $mail->Username = 'noreply.flowershop@gmail.com'; // Your email
+        $mail->Password = 'DetyreKursi2024'; // Your email password
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
 
