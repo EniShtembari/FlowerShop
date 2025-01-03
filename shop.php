@@ -32,6 +32,7 @@ $result = $conn->query($sql);
 <div class="shop">
     <div class="content">
         <h1>Our Shop</h1>
+
     </div>
 </div>
 
@@ -80,7 +81,27 @@ $result = $conn->query($sql);
     </div>
     </div>
 
+<!--add a product-->
+    <!-- Display products from the database -->
+    <?php if ($result->num_rows > 0): ?>
+        <div class="product-list">
+            <?php while ($row = $result->fetch_assoc()): ?>
+                <div class="product">
+                    <img src="<?php echo htmlspecialchars($row['ImageURL']); ?>" alt="Product Image">
+                    <h2><?php echo htmlspecialchars($row['ProductName']); ?></h2>
+                    <p class="discount">Discount: <?php echo htmlspecialchars($row['DiscountPercentage']); ?>%</p>
+                    <p>
+                        Price: $<?php echo htmlspecialchars($row['CurrentPrice']); ?>
+                        <span class="original-price">$<?php echo htmlspecialchars($row['OriginalPrice']); ?></span>
+                    </p>
+                </div>
+            <?php endwhile; ?>
+        </div>
+    <?php else: ?>
+        <p>No products available.</p>
+    <?php endif; ?>
 
+    <?php $conn->close(); ?>
 
 
     <!--next button-->
