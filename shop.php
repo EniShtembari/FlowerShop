@@ -1,14 +1,22 @@
 <?php
-// Include the connection file
-$pdo = require 'connect.php';
+// Database connection
+$servername = "localhost";
+$username = "root"; // Replace with your database username
+$password = ""; // Replace with your database password
+$dbname = "flowershop"; // Replace with your database name
 
-// Prepare and execute the query
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Fetch products
 $sql = "SELECT * FROM products";
-$stmt = $pdo->query($sql);
-
-// Fetch all results
-$products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$result = $conn->query($sql);
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -27,31 +35,53 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
 </div>
 
+
 <!--product section-->
 <section class="product" id="product">
+
     <div class="box-container">
-        <?php if (count($products) > 0): ?>
-            <?php foreach ($products as $product): ?>
-                <div class="box">
-                    <span class="discount">-<?= htmlspecialchars($product["discount"]) ?>%</span>
-                    <div class="image">
-                        <img src="<?= htmlspecialchars($product["image_url"]) ?>" alt="<?= htmlspecialchars($product["name"]) ?>">
-                        <div class="icons">
-                            <a href="#" class="likes">❤️</a>
-                            <a href="#" class="cart-btn">Add to cart</a>
-                            <a href="#" class="shares">🔗</a>
-                        </div>
-                    </div>
-                    <div class="content">
-                        <h3><?= htmlspecialchars($product["name"]) ?></h3>
-                        <div class="price">$<?= htmlspecialchars($product["price"]) ?> <span>$<?= htmlspecialchars($product["original_price"]) ?></span></div>
+
+        <?php
+        // Check if there are products and display them
+        if ($result->num_rows > 0) {
+        // Loop through each product
+        while($row = $result->fetch_assoc()) {
+        // Assign variables from the result
+        $productID = $row['ProductID'];
+        $productName = $row['ProductName'];
+        $imageURL = $row['ImageURL'];
+        $discountPercentage = $row['DiscountPercentage'];
+        $currentPrice = $row['CurrentPrice'];
+        $originalPrice = $row['OriginalPrice'];
+        ?>
+            <!-- Display product box -->
+            <div class="box">
+                <span class="discount"> -<?php echo $discountPercentage; ?>% </span>
+                <div class="image">
+                    <img src="<?php echo $imageURL; ?>" alt="<?php echo $productName; ?>">
+                    <div class="icons">
+                        <a href="#" class="likes">❤️</a>
+                        <a href="#" class="cart-btn">Add to cart</a>
+                        <a href="#" class="shares">🔗</a>
                     </div>
                 </div>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <p>No products available.</p>
-        <?php endif; ?>
+                <div class="content">
+                    <h3><?php echo $productName; ?></h3>
+                    <div class="price">$<?php echo $currentPrice; ?> <span>$<?php echo $originalPrice; ?></span></div>
+                </div>
+            </div>
+
+            <?php
+        }
+        } else {
+            echo "<p>No products found.</p>";
+        }
+        ?>
     </div>
+    </div>
+
+
+
 
     <!--next button-->
     <div class="pagination-container">
@@ -61,6 +91,11 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <a href="shop1.html" class="page">next</a>
         </div>
     </div>
+
+
+
+
+
 </section>
 </body>
 </html>
