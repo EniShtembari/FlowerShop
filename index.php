@@ -29,7 +29,7 @@ unset($_SESSION['success_message']);
             <input type="email" name="email" placeholder="Email" required>
         </div>
         <div class="input-group">
-            <i class="fas fa-lock"></i>
+            <i class="fas fa-eye" id="eye"></i>
             <input type="password" name="password" placeholder="Password" required>
         </div>
         <input type="submit" class="btn" value="Log in" name="login">
@@ -40,5 +40,6 @@ unset($_SESSION['success_message']);
         <a href="register.php">Register</a>
     </div>
 </div>
+<script src="script.js"></script>
 </body>
 </html>

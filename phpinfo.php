@@ -1,22 +1,14 @@
 <?php
-$stream_context = stream_context_create([
-    'ssl' => [
-        'cafile' => 'C:\xampp\php\extras\ssl\cacert.pem',
-        'verify_peer' => true,
-        'verify_peer_name' => true,
-    ]
-]);
-$socket = stream_socket_client(
-    "tcp://smtp.gmail.com:587",
-    $errno,
-    $errstr,
-    30,
-    STREAM_CLIENT_CONNECT,
-    $stream_context
-);
-if ($socket) {
-    echo "OpenSSL is working properly.";
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, "https://www.google.com");
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+$response = curl_exec($ch);
+
+if ($response === false) {
+    echo 'Curl error: ' . curl_error($ch);
 } else {
-    echo "OpenSSL error: $errstr ($errno)";
+    echo 'Curl is working!';
 }
+
+curl_close($ch);
 ?>

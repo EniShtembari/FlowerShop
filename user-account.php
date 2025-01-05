@@ -2,9 +2,9 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require 'PHPMailer/src/Exception.php';
-require 'PHPMailer/src/PHPMailer.php';
-require 'PHPMailer/src/SMTP.php';
+require 'phpmailer/phpmailer/src/Exception.php';
+require 'phpmailer/phpmailer/src/PHPMailer.php';
+require 'phpmailer/phpmailer/src/SMTP.php';
 require_once 'connect.php';
 
 session_start();
@@ -70,9 +70,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
         $mail->Username = 'noreply.bloomflowers@gmail.com';
-        $mail->Password = 'nhzg guoz wtsf thsn'; // Use App Password here
+        $mail->Password = 'nbtk lstr ogqa bpoo'; // Use App Password here
         $mail->SMTPSecure ='tsl';
         $mail->Port = 587;
+
+        $mail->SMTPOptions = array(
+            'ssl' => array(
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+                'allow_self_signed' => true
+            )
+        );
 
         $mail->setFrom('noreply.bloomflowers@gmail.com', 'Bloom Flowers');
         $mail->addAddress($email);
