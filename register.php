@@ -40,7 +40,7 @@ if (isset($_SESSION['errors'])) {
             <input type="email" name="email" placeholder="Email" required>
         </div>
         <div class="input-group">
-            <i class="fas fa-lock"></i>
+            <i class="fas fa-eye"></i>
             <input type="password" name="password" placeholder="Password" required>
         </div>
         <div class="input-group">
