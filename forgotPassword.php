@@ -1,75 +1,86 @@
 <?php
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    if (isset($_POST["email"])) {
-        $email = $_POST["email"];
-        $token = bin2hex(random_bytes(16));
-        $tokenHash = hash("sha256", $token);
-        $expiry = date("Y-m-d H:i:s", time() + 60 * 30);
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
-        $pdo = require __DIR__ . "/connect.php";
+require 'phpmailer/phpmailer/src/Exception.php';
+require 'phpmailer/phpmailer/src/PHPMailer.php';
+require 'phpmailer/phpmailer/src/SMTP.php';
 
-        if (!($pdo instanceof PDO)) {
-            die("Database connection failed or returned an invalid object.");
-        }
+$pdo = require __DIR__ . '/connect.php';
 
-        $sql = "UPDATE users
-                SET resetPassword = :resetPassword,
-                    resetPasswordExpiresAt = :resetPasswordExpiresAt
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["email"])) {
+    $email = $_POST["email"];
+    $code = rand(100000, 999999); // 6-digit code
+    $expiry = time() + 90; // 90 seconds
+
+    // Check if the email exists in the database
+    $sql = "SELECT * FROM users WHERE email = :email";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':email', $email);
+    $stmt->execute();
+
+    if ($stmt->rowCount() > 0) {
+        // Update reset code and expiration
+        $sql = "UPDATE users 
+                SET resetPassword = :resetPassword, resetPasswordExpiration = :resetPasswordExpiration 
                 WHERE email = :email";
         $stmt = $pdo->prepare($sql);
-
-        $stmt->bindParam(':resetPassword', $tokenHash);
-        $stmt->bindParam(':resetPasswordExpiresAt', $expiry);
+        $stmt->bindParam(':resetPassword', $code);
+        $stmt->bindParam(':resetPasswordExpiration', date("Y-m-d H:i:s", $expiry));
         $stmt->bindParam(':email', $email);
 
         if ($stmt->execute()) {
-            if ($stmt->rowCount() > 0) {
-                $message = "Reset token generated and saved successfully.";
-                $messageClass = "success-main";
-            } else {
-                $message = "Email address not found in the database.";
-                $messageClass = "error-main";
+            // Send the reset code via email
+            $mail = new PHPMailer(true);
+
+            try {
+                $mail->isSMTP();
+                $mail->Host = 'smtp.gmail.com';
+                $mail->SMTPAuth = true;
+                $mail->Username = 'noreply.bloomflowers@gmail.com';
+                $mail->Password = 'your-app-password'; // Replace with an app password
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                $mail->Port = 587;
+
+                $mail->setFrom('noreply.bloomflowers@gmail.com', 'Bloom Flowers');
+                $mail->addAddress($email);
+
+                $mail->isHTML(true);
+                $mail->Subject = 'Password Reset Code';
+                $mail->Body = "Hi,<br><br>Your password reset code is: <b>$code</b><br>This code will expire in 1.5 minutes.";
+
+                $mail->send();
+                header('Location: verifyReset.php?email=' . urlencode($email));
+                exit();
+            } catch (Exception $e) {
+                $message = "Failed to send the email: " . $mail->ErrorInfo;
             }
         } else {
-            $message = "Error updating the database.";
-            $messageClass = "error-main";
+            $message = "Error updating reset code in the database.";
         }
     } else {
-        $message = "Email is not set.";
-        $messageClass = "error-main";
+        $message = "Email not found.";
     }
 }
 ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forgot password</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <title>Forgot Password</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container" >
-    <h1 class="form-title">Forgot password</h1>
-
-        <?php if (!empty($message)) : ?>
-            <div class="<?php echo $messageClass; ?>">
-                <?php echo htmlspecialchars($message); ?>
-            </div>
-        <?php endif; ?>
-
+<div class="container">
+    <h1>Forgot Password</h1>
+    <?php if (!empty($message)) : ?>
+        <div class="error"><?php echo htmlspecialchars($message); ?></div>
+    <?php endif; ?>
     <form method="POST">
-        <div class="input-group">
-            <i class="fas fa-envelope"></i>
-            <input type="email" name="email" id="email" placeholder="Email" required>
-        </div>
-        <button class="btn">Send</button>
-
+        <input type="email" name="email" placeholder="Enter your email" required>
+        <button type="submit">Send Reset Code</button>
     </form>
-
-
+</div>
 </body>
 </html>

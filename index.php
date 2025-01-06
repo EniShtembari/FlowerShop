@@ -91,6 +91,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
             <i class="fas fa-eye" id="eye"></i>
             <input type="password" name="password" id="password" placeholder="Password" required>
         </div>
+        <div class="links" style="text-align: left">
+        <a href="forgotPassword.php">Forgot password</a><br><br>
+        </div>
         <input type="submit" class="btn" value="Log in" name="login">
     </form>
 
