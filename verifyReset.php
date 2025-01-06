@@ -30,14 +30,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["email"], $_POST["code
 </head>
 <body>
 <div class="container">
-    <h1>Verify Reset Code</h1>
+    <h1 class="form-title">Verify Reset Code</h1>
     <?php if (!empty($message)) : ?>
         <div class="error"><?php echo htmlspecialchars($message); ?></div>
     <?php endif; ?>
     <form method="POST">
+        <div class="input-group">
         <input type="hidden" name="email" value="<?php echo htmlspecialchars($_GET['email'] ?? ''); ?>">
         <input type="text" name="code" placeholder="Enter reset code" required>
-        <button type="submit">Verify Code</button>
+        </div>
+        <button type="submit" class="btn">Verify Code</button>
+
     </form>
 </div>
 </body>

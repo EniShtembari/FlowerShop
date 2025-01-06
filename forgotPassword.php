@@ -26,7 +26,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["email"])) {
                 WHERE email = :email";
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(':resetPassword', $code);
-        $stmt->bindParam(':resetPasswordExpiration', date("Y-m-d H:i:s", $expiry));
+        $resetPasswordExpiration = date("Y-m-d H:i:s", $expiry);
+        $stmt->bindParam(':resetPasswordExpiration', $resetPasswordExpiration);
         $stmt->bindParam(':email', $email);
 
         if ($stmt->execute()) {
@@ -38,9 +39,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["email"])) {
                 $mail->Host = 'smtp.gmail.com';
                 $mail->SMTPAuth = true;
                 $mail->Username = 'noreply.bloomflowers@gmail.com';
-                $mail->Password = 'your-app-password'; // Replace with an app password
-                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                $mail->Password = 'nbtk lstr ogqa bpoo'; // Use App Password here
+                $mail->SMTPSecure ='tsl';
                 $mail->Port = 587;
+
+                $mail->SMTPOptions = array(
+                    'ssl' => array(
+                        'verify_peer' => false,
+                        'verify_peer_name' => false,
+                        'allow_self_signed' => true
+                    )
+                );
 
                 $mail->setFrom('noreply.bloomflowers@gmail.com', 'Bloom Flowers');
                 $mail->addAddress($email);
@@ -70,17 +79,39 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["email"])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forgot Password</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
 <div class="container">
-    <h1>Forgot Password</h1>
+    <h1 class="form-title">Forgot Password</h1>
     <?php if (!empty($message)) : ?>
         <div class="error"><?php echo htmlspecialchars($message); ?></div>
     <?php endif; ?>
+
     <form method="POST">
+        <div class="input-group">
+            <i class="fas fa-envelope"></i>
         <input type="email" name="email" placeholder="Enter your email" required>
-        <button type="submit">Send Reset Code</button>
+        </div>
+        <button type="submit" class="btn">Send Reset Code</button>
     </form>
+
+    <div id="loginLink" style="display: none;">
+    <a href="index.php">Log in</a>
+    </div>
+
 </div>
+
+<script>
+    // Server-provided flag for visibility
+    const showLoginLink = <?php echo json_encode(isset($showLoginLink) ? $showLoginLink : false); ?>;
+
+    // Manage visibility of elements
+    if (showLoginLink) {
+        document.getElementById("resetForm").style.display = "none"; // Hide the form
+        document.getElementById("loginLink").style.display = "block"; // Show the login link
+    }
+</script>
 </body>
 </html>
