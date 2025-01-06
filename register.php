@@ -40,15 +40,16 @@ if (isset($_SESSION['errors'])) {
             <input type="email" name="email" placeholder="Email" required>
         </div>
         <div class="input-group">
-            <i class="fas fa-eye"></i>
-            <input type="password" name="password" placeholder="Password" required>
+            <i class="fas fa-eye" id="eye"></i>
+            <input type="password" name="password" id="password" placeholder="Password" required>
         </div>
         <div class="input-group">
-            <i class="fas fa-lock"></i>
-            <input type="password" name="confirmPassword" placeholder="Confirm Password" required>
+            <i class="fas fa-eye" id="eye"></i>
+            <input type="password" name="confirmPassword" id="password" placeholder="Confirm Password" required>
         </div>
         <input type="submit" class="btn" value="Register" name="register">
     </form>
 </div>
+<script src="script.js"></script>
 </body>
 </html>

@@ -3,6 +3,11 @@ global $pdo;
 session_start();
 require_once 'connect.php';
 
+if (!isset($_SESSION['email'])) {
+    echo "Session variable 'email' is not set.";
+    exit();
+}
+
 $errors = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['verify'])) {
@@ -14,20 +19,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['verify'])) {
     } elseif (empty($code)) {
         $errors[] = 'Verification code is required.';
     } else {
-        $stmt = $pdo->prepare('SELECT * FROM users WHERE email = :email AND verificationCode = :code AND status = :status');
-        $stmt->execute(['email' => $email, 'code' => $code, 'status' => 'unverified']);
+        $stmt = $pdo->prepare('SELECT * FROM users WHERE email = :email AND status = :status');
+        $stmt->execute(['email' => $email, 'status' => 'unverified']);
         $user = $stmt->fetch();
 
         if ($user) {
-            $stmt = $pdo->prepare('UPDATE users SET status = :status WHERE email = :email');
-            $stmt->execute(['status' => 'verified', 'email' => $email]);
-            $_SESSION['success_message'] = 'Email verified successfully!';
-            header('Location: index.php');
-            exit();
+            $currentTime = date('Y-m-d H:i:s');
+            if ($currentTime > $user['codeExpiration']) {
+                $errors[] = 'The verification code has expired. Please request a new code.';
+            } elseif ($user['verificationCode'] === $code) {
+                $stmt = $pdo->prepare('UPDATE users SET status = :status WHERE email = :email');
+                $stmt->execute(['status' => 'verified', 'email' => $email]);
+                $_SESSION['success_message'] = 'Email verified successfully!';
+                header('Location: index.php');
+                exit();
+            } else {
+                $errors[] = 'Invalid verification code.';
+            }
         } else {
-            $errors[] = 'Invalid verification code.';
+            $errors[] = 'Invalid request. User not found.';
         }
     }
+
 }
 ?>
 
@@ -57,6 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['verify'])) {
         </div>
         <button type="submit" name="verify" class="btn">Verify</button>
     </form>
+    <p>Didn't receive the code? <a href="resend.php">Resend Code</a></p>
 </div>
 </body>
 </html>

@@ -5,6 +5,7 @@ use PHPMailer\PHPMailer\Exception;
 require 'phpmailer/phpmailer/src/Exception.php';
 require 'phpmailer/phpmailer/src/PHPMailer.php';
 require 'phpmailer/phpmailer/src/SMTP.php';
+
 require_once 'connect.php';
 
 session_start();
@@ -51,14 +52,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
     // Hash password
     $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
+    $codeExpiration = date('Y-m-d H:i:s', time() + 90);
     // Save user to database
-    $stmt = $pdo->prepare('INSERT INTO users (firstName, lastName, email, password, verificationCode, status) VALUES (:firstName, :lastName, :email, :password, :verificationCode, :status)');
+    $stmt = $pdo->prepare('INSERT INTO users (firstName, lastName, email, password, verificationCode, codeExpiration, status) 
+                            VALUES (:firstName, :lastName, :email, :password, :verificationCode, :codeExpiration, :status)');
     $stmt->execute([
         'firstName' => $firstName,
         'lastName' => $lastName,
         'email' => $email,
         'password' => $hashedPassword,
         'verificationCode' => $verificationCode,
+        'codeExpiration' => $codeExpiration,
         'status' => 'unverified',
     ]);
 
@@ -90,6 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
         $mail->Body = "Hi $firstName,<br><br>Your verification code is: <b>$verificationCode</b><br><br>Enter this code to verify your email.<br><br>Thanks!";
 
         $mail->send();
+        $_SESSION['email'] = $email;
         $_SESSION['success'] = 'Registration successful! Check your email for the verification code.';
         header('Location: verify.php');
         exit();
