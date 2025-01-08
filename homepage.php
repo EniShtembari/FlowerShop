@@ -12,5 +12,6 @@
 </head>
 <body>
     <H1>Welcome to FlowerShop</H1>
+    <a href="myAccount.php">My account</a>
 </body>
 </html>

@@ -1,0 +1,119 @@
+:root {
+    --primary-color: #FF97B7;        /* Soft pink */
+    --secondary-color: rgba(255, 255, 255, 0.85); /* Translucent white */
+    --accent-color: #4A90E2;         /* Cornflower blue */
+    --text-color: #2C3E50;           /* Dark blue-grey */
+    --hover-color: #FF7AA2;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --transition-speed: 0.3s;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', Arial, sans-serif;
+    background: #f3b0d2;
+    color: var(--text-color);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-image: url("composition/backgr.jpg");
+    color: white;
+}
+
+.header .logo {
+    color: #9a1159;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.header nav a, .account-actions a {
+    margin-right: 15px;
+    color: #9a1159;
+    text-decoration: none;
+    font-size: 1rem;
+}
+
+header a:hover {
+    text-decoration: underline;
+}
+
+main {
+    padding: 2rem;
+    background: var(--secondary-color);
+    margin: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px var(--shadow-color);
+}
+
+h1, h2 {
+    margin-bottom: 1rem;
+    color: #9a1159;
+}
+
+.account-options {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.card {
+    flex: 1;
+    text-align: center;
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px var(--shadow-color);
+    transition: transform var(--transition-speed);
+}
+
+.card img {
+    max-width: 50px;
+    margin-bottom: 1rem;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card p {
+    font-weight: bold;
+}
+
+.latest-parcel {
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px var(--shadow-color);
+}
+
+.parcel-item {
+    border-bottom: 1px solid var(--shadow-color);
+    padding: 1rem 0;
+}
+
+.parcel-item:last-child {
+    border-bottom: none;
+}
+
+.parcel-item p {
+    margin-bottom: 0.5rem;
+}
+
+.parcel-item a {
+    color: var(--accent-color);
+    text-decoration: none;
+}
+
+.parcel-item a:hover {
+    text-decoration: underline;
+}

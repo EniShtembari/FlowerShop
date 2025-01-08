@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Settings</title>
+    <link rel="stylesheet" href="profileSettings.css">
+</head>
+<body>
+<div class="header">
+    <div class="logo">MyPlatform</div>
+    <nav>
+        <a href="homepage.php">Home</a>
+        <a href="#">Help</a>
+    </nav>
+    <div class="account-actions">
+        <a href="#">Log Out</a>
+    </div>
+</div>
+<main>
+    <h1>Profile Settings</h1>
+    <div class="profile-container">
+        <form action="updateProfile.php" method="POST" enctype="multipart/form-data">
+            <div class="profile-picture">
+                <img id="preview" src="default-profile.png" alt="Profile Picture">
+                <input type="file" name="profile_picture" accept="image/*" onchange="loadFile(event)">
+            </div>
+            <label for="firstName">First Name:</label>
+            <input type="text" name="firstName" id="firstName" required value="">
+
+            <label for="lastName">Last Name:</label>
+            <input type="text" name="lastName" id="lastName" required value="">
+
+            <label for="email">Email:</label>
+            <input type="email" name="email" id="email" required value="">
+
+            <label for="password">Password:</label>
+            <input type="password" name="password" id="password" required>
+
+            <button type="submit">Save Changes</button>
+        </form>
+    </div>
+</main>
+<script>
+    const loadFile = (event) => {
+        const output = document.getElementById('preview');
+        output.src = URL.createObjectURL(event.target.files[0]);
+        output.onload = () => {
+            URL.revokeObjectURL(output.src);
+        }
+    };
+</script>
+</body>
+</html>
