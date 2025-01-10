@@ -25,19 +25,19 @@
     <h1>My Account</h1>
     <div class="account-options">
         <div class="card">
-            <img src="/icons/4357459.png" alt="Orders">
+            <img src="icons/4357459.png" alt="Orders">
             <p>My Orders</p>
         </div>
         <div class="card">
-            <img src="/icons/placeholder.png" alt="Address">
+            <img src="icons/placeholder.png" alt="Address">
             <p>Address Book</p>
         </div>
-        <div class="card" onclick="location.href='profileSettings.html';" style="cursor: pointer;">
-            <img src="/icons/setting.png" alt="Settings">
+        <div class="card" onclick="location.href='profileSettings.php';" style="cursor: pointer;">
+            <img src="icons/setting.png" alt="Settings">
             <p>Profile Settings</p>
         </div>
         <div class="card">
-            <img src="/icons/faq.png" alt="FAQ">
+            <img src="icons/faq.png" alt="FAQ">
             <p>Help and FAQ</p>
         </div>
     </div>

@@ -26,7 +26,7 @@ if (isset($_SESSION['errors'])) {
     }
     ?>
 
-    <form method="POST" action="user-account.php">
+    <form method="POST" action="userAccount.php">
         <div class="input-group">
             <i class="fas fa-user"></i>
             <input type="text" name="firstName" placeholder="First Name" required>
