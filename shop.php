@@ -1,9 +1,9 @@
 <?php
 // Database connection
 $servername = "localhost";
-$username = "root"; // Replace with your database username
-$password = ""; // Replace with your database password
-$dbname = "flowershop"; // Replace with your database name
+$username = "root";
+$password = "";
+$dbname = "flowershop";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -12,7 +12,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Fetch products
+
 $sql = "SELECT * FROM products";
 $result = $conn->query($sql);
 ?>
@@ -23,7 +23,8 @@ $result = $conn->query($sql);
 <head>
     <meta charset="UTF-8">
     <title>Shop</title>
-    <link rel="stylesheet" href="shop.css">
+    <link rel="stylesheet" href="http://localhost/FlowerShop/shop.css">
+
     <link href="https://fonts.googleapis.com/css2?family=Diphylleia&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -32,7 +33,11 @@ $result = $conn->query($sql);
 <div class="shop">
     <div class="content">
         <h1>Our Shop</h1>
-
+        <!-- Cool admin button -->
+        <form action="admin.php" method="get">
+            <button type="submit" class="admin-btn">Go to Admin</button>
+        </form>
+    </div>
     </div>
 </div>
 
@@ -43,11 +48,11 @@ $result = $conn->query($sql);
     <div class="box-container">
 
         <?php
-        // Check if there are products and display them
+
         if ($result->num_rows > 0) {
-        // Loop through each product
+
         while($row = $result->fetch_assoc()) {
-        // Assign variables from the result
+
         $productID = $row['ProductID'];
         $productName = $row['ProductName'];
         $imageURL = $row['ImageURL'];
@@ -61,14 +66,26 @@ $result = $conn->query($sql);
                 <div class="image">
                     <img src="<?php echo $imageURL; ?>" alt="<?php echo $productName; ?>">
                     <div class="icons">
-                        <a href="#" class="likes">❤️</a>
+                        <button class="add-to-wishlist">
+                            <a href="wishlist.php">❤️</a>
+
+                        </button>
+
+
+
                         <a href="#" class="cart-btn">Add to cart</a>
-                        <a href="#" class="shares">🔗</a>
+
                     </div>
                 </div>
                 <div class="content">
                     <h3><?php echo $productName; ?></h3>
-                    <div class="price">$<?php echo $currentPrice; ?> <span>$<?php echo $originalPrice; ?></span></div>
+                    <div class="price">$<?php echo $currentPrice; ?> <span>$<?php echo $originalPrice; ?></span>
+                    </div>
+                    <!-- Add Edit Button -->
+                    <form action="edit.php" method="get">
+                        <input type="hidden" name="productID" value="<?php echo $productID; ?>">
+                        <button type="submit" class="edit-btn">Edit Product</button>
+                    </form>
                 </div>
             </div>
 
@@ -112,11 +129,7 @@ $result = $conn->query($sql);
             <a href="shop1.html" class="page">next</a>
         </div>
     </div>
-
-
-
-
-
 </section>
+<script src="http://localhost/FlowerShop/shop.js"></script>
 </body>
 </html>

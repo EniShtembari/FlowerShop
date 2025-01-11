@@ -199,6 +199,7 @@
 .icon-container {
     background-image: url("composition/backgr.jpg");
     display: flex;
+    background-size: cover;
     justify-content: center;
     flex-wrap: wrap;
     gap: 1.5rem;
@@ -375,6 +376,7 @@
 .review .box-container {
     display: flex;
     background-image: url("composition/pinkbc.jpg");
+    background-size: cover;
     flex-wrap: wrap;
     justify-content: center;
     gap: 75px;
