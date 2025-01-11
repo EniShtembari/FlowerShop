@@ -1,5 +1,5 @@
 :root {
-    --primary-color: #FF97B7;        /* Soft pink */
+    --primary-color: #ffd6dc;        /* Soft pink */
     --secondary-color: rgba(255, 255, 255, 0.85); /* Translucent white */
     --accent-color: #4A90E2;         /* Cornflower blue */
     --text-color: #2C3E50;           /* Dark blue-grey */
@@ -16,7 +16,7 @@
 
 body {
     font-family: 'Inter', Arial, sans-serif;
-    background: #f3b0d2;
+    background: #ffd6dc;
     color: var(--text-color);
 }
 
