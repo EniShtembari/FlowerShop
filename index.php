@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
                         $_SESSION['firstName'] = $user['firstName'];
 
                         // Redirect to homepage
-                        header('Location: homepage.php');
+                        header('Location: homepage.html');
                         exit();
                     }
                 } else {
