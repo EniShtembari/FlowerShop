@@ -67,7 +67,7 @@ $result = $conn->query($sql);
                     <img src="<?php echo $imageURL; ?>" alt="<?php echo $productName; ?>">
                     <div class="icons">
                         <button class="add-to-wishlist">
-                            <a href="wishlist.php">❤️</a>
+                            <a href="wishlist.php?add_to_wishlist=<?php echo $productID; ?>">❤️</a>
 
                         </button>
 

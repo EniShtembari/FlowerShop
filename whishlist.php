@@ -12,50 +12,52 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+// Start session to track logged-in user
 session_start();
-
-// Ensure the user is logged in and retrieve user_id
 if (!isset($_SESSION['user_id'])) {
     die("User not logged in.");
 }
 $user_id = $_SESSION['user_id'];  // Retrieve user_id from session
 
-// Step 1: Check if a product is being added to the wishlist
+// Add product to wishlist
 if (isset($_GET['add_to_wishlist'])) {
     $product_id = $_GET['add_to_wishlist'];
 
-    // Prevent SQL injection by using prepared statements
+    // Prevent SQL injection using prepared statements
     $stmt = $conn->prepare("INSERT INTO wishlist (user_id, product_id) VALUES (?, ?)");
     $stmt->bind_param("ii", $user_id, $product_id);
 
     if ($stmt->execute()) {
         echo "<script>alert('Product added to wishlist.');</script>";
     } else {
-        echo "<script>alert('Error adding product to wishlist: " . mysqli_error($conn) . "');</script>";
+        echo "<script>alert('Error adding product to wishlist: " . $stmt->error . "');</script>";
     }
 
     $stmt->close();
 }
 
-// Step 2: Check if a product is being removed from the wishlist
+// Remove product from wishlist
 if (isset($_GET['remove_from_wishlist'])) {
     $product_id = $_GET['remove_from_wishlist'];
 
-    // Prevent SQL injection by using prepared statements
+    // Prevent SQL injection using prepared statements
     $stmt = $conn->prepare("DELETE FROM wishlist WHERE user_id = ? AND product_id = ?");
     $stmt->bind_param("ii", $user_id, $product_id);
 
     if ($stmt->execute()) {
         echo "<script>alert('Product removed from wishlist.');</script>";
     } else {
-        echo "<script>alert('Error removing product from wishlist: " . mysqli_error($conn) . "');</script>";
+        echo "<script>alert('Error removing product from wishlist: " . $stmt->error . "');</script>";
     }
 
     $stmt->close();
 }
 
 // Fetch wishlist products for the logged-in user
-$sql = "SELECT products.* FROM wishlist JOIN products ON wishlist.product_id = products.ProductID WHERE wishlist.user_id = '$user_id'";
+$sql = "SELECT products.* 
+        FROM wishlist 
+        JOIN products ON wishlist.product_id = products.ProductID 
+        WHERE wishlist.user_id = '$user_id'";
 $result = mysqli_query($conn, $sql);
 ?>
 
@@ -83,11 +85,12 @@ $result = mysqli_query($conn, $sql);
             echo '<div class="item-price">$' . $row['CurrentPrice'] . '</div>';
             echo '</div>';
             echo '<button class="remove-btn">
-                      <a href="wishlist.php?remove_from_wishlist=' . $row['ProductID'] . '">Remove</a>
-                  </button>';
+                          <a href="wishlist.php?remove_from_wishlist=' . $row['ProductID'] . '">Remove</a>
+                      </button>';
             echo '</div>';
         }
     } else {
+        // Display this message if no products are in the wishlist
         echo "<p>Your wishlist is empty.</p>";
     }
     ?>
