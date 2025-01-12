@@ -23,8 +23,7 @@ $result = $conn->query($sql);
 <head>
     <meta charset="UTF-8">
     <title>Shop</title>
-    <link rel="stylesheet" href="http://localhost/FlowerShop/shop.css">
-
+    <link rel="stylesheet" href="shop.css">
     <link href="https://fonts.googleapis.com/css2?family=Diphylleia&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -35,7 +34,7 @@ $result = $conn->query($sql);
         <h1>Our Shop</h1>
         <!-- Cool admin button -->
         <form action="admin.php" method="get">
-            <button type="submit" class="admin-btn">Go to Admin</button>
+            <button type="submit" class="admin-btn">Add Product</button>
         </form>
     </div>
     </div>

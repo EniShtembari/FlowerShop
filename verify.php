@@ -19,28 +19,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['verify'])) {
     } elseif (empty($code)) {
         $errors[] = 'Verification code is required.';
     } else {
-        $stmt = $pdo->prepare('SELECT * FROM users WHERE email = :email AND status = :status');
-        $stmt->execute(['email' => $email, 'status' => 'unverified']);
+        // Retrieve the user's ID based on the email
+        $stmt = $pdo->prepare('SELECT id FROM users WHERE email = :email');
+        $stmt->execute(['email' => $email]);
         $user = $stmt->fetch();
 
         if ($user) {
-            $currentTime = date('Y-m-d H:i:s');
-            if ($currentTime > $user['codeExpiration']) {
-                $errors[] = 'The verification code has expired. Please request a new code.';
-            } elseif ($user['verificationCode'] === $code) {
-                $stmt = $pdo->prepare('UPDATE users SET status = :status WHERE email = :email');
-                $stmt->execute(['status' => 'verified', 'email' => $email]);
-                $_SESSION['success_message'] = 'Email verified successfully!';
-                header('Location: index.php');
-                exit();
+            // Fetch the verification code details from the verification_codes table
+            $stmt = $pdo->prepare('SELECT * FROM verification_codes WHERE id = :id AND status = :status');
+            $stmt->execute([
+                'id' => $user['id'],
+                'status' => 'unverified',
+            ]);
+            $verification = $stmt->fetch();
+
+            if ($verification) {
+                $currentTime = date('Y-m-d H:i:s');
+                if ($currentTime > $verification['verificationCodeExpiration']) {
+                    $errors[] = 'The verification code has expired. Please request a new code.';
+                } elseif ($verification['verificationCode'] === $code) {
+                    // Update the verification status in the verification_codes table
+                    $stmt = $pdo->prepare('UPDATE verification_codes SET status = :status WHERE id = :id');
+                    $stmt->execute([
+                        'status' => 'verified',
+                        'id' => $user['id'],
+                    ]);
+
+                    $_SESSION['success_message'] = 'Email verified successfully!';
+                    header('Location: index.php');
+                    exit();
+                } else {
+                    $errors[] = 'Invalid verification code.';
+                }
             } else {
-                $errors[] = 'Invalid verification code.';
+                $errors[] = 'Invalid request. Verification details not found.';
             }
         } else {
             $errors[] = 'Invalid request. User not found.';
         }
     }
-
 }
 ?>
 

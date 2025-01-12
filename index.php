@@ -1,24 +1,21 @@
 <?php
-session_start();  // Start the session
+session_start();
 
-// Include database connection
 $pdo = require __DIR__ . '/connect.php';
 if (!isset($pdo)) {
     die('Database connection not established.');
 }
 
-// Initialize variables
 $success_message = $_SESSION['success_message'] ?? null;
 unset($_SESSION['success_message']);
 $error_message = null;
 $errors = [];
 
-// Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
     $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
     $password = $_POST['password'];
+    $rememberMe = isset($_POST['remember_me']);
 
-    // Validate input
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errors['email'] = 'Invalid email format.';
     }
@@ -27,68 +24,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
     }
 
     if (empty($errors)) {
-        // Query to fetch user by email
         $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
         $stmt->execute([':email' => $email]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($user) {
-            // Check for failed attempts
-            $stmt = $pdo->prepare("SELECT * FROM login_attempts WHERE user_id = :user_id");
-            $stmt->execute([':user_id' => $user['id']]);
-            $attempts = $stmt->fetch(PDO::FETCH_ASSOC);
+            if (password_verify($password, $user['password'])) {
+                // Successful login
+                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['email'] = $user['email'];
+                $_SESSION['firstName'] = $user['firstName'];
 
-            // Block login if the user is blocked
-            if ($attempts && $attempts['blockedUntil'] > date('Y-m-d H:i:s')) {
-                $error_message = "Your account is blocked. Try again after " . $attempts['blockedUntil'];
-            } else {
-                // Verify password
-                if (password_verify($password, $user['password'])) {
-                    // Successful login: reset attempts
-                    $stmt = $pdo->prepare("DELETE FROM login_attempts WHERE user_id = :user_id");
-                    $stmt->execute([':user_id' => $user['id']]);
+                if ($rememberMe) {
+                    $token = bin2hex(random_bytes(32));
+                    $hashedToken = password_hash($token, PASSWORD_BCRYPT);
 
-                    // Check account status
-                    if ($user['status'] === 'unverified') {
-                        $errors['unverified'] = 'Your account is not verified. Please verify your email.';
-                    } else {
-                        // Set session variables for the logged-in user
-                        $_SESSION['user_id'] = $user['id'];
-                        $_SESSION['email'] = $user['email'];
-                        $_SESSION['firstName'] = $user['firstName'];
+                    $stmt = $pdo->prepare("UPDATE users SET rememberMe = :token WHERE id = :id");
+                    $stmt->execute([':token' => $hashedToken, ':id' => $user['id']]);
 
-                        // Redirect to homepage
-                        header('Location: homepage.html');
-                        exit();
-                    }
-                } else {
-                    // Failed login: handle attempts
-                    if (!$attempts) {
-                        // No previous attempts: create record
-                        $stmt = $pdo->prepare("INSERT INTO login_attempts (user_id, attempts, lastAttempt) VALUES (:user_id, 1, NOW())");
-                        $stmt->execute([':user_id' => $user['id']]);
-                    } else {
-                        // Update failed attempts
-                        $new_attempts = $attempts['attempts'] + 1;
-
-                        // Block if attempts exceed the limit
-                        if ($new_attempts >= 7) {
-                            $blocked_until = date('Y-m-d H:i:s', strtotime('+30 minutes'));
-                            $stmt = $pdo->prepare("UPDATE login_attempts SET attempts = :attempts, lastAttempt = NOW(), blockedUntil = :blockedUntil WHERE user_id = :user_id");
-                            $stmt->execute([
-                                ':attempts' => $new_attempts,
-                                ':blockedUntil' => $blocked_until,
-                                ':user_id' => $user['id']
-                            ]);
-                            $error_message = "Too many failed attempts. You are blocked for 30 minutes.";
-                        } else {
-                            // Increment attempts
-                            $stmt = $pdo->prepare("UPDATE login_attempts SET attempts = :attempts, lastAttempt = NOW() WHERE user_id = :user_id");
-                            $stmt->execute([':attempts' => $new_attempts, ':user_id' => $user['id']]);
-                            $error_message = "Invalid email or password.";
-                        }
-                    }
+                    setcookie('remember_me', $token, time() + (30 * 24 * 60 * 60), '/', null, false, true);
                 }
+
+                header('Location: homepage.html');
+                exit();
+            } else {
+                $error_message = "Invalid email or password.";
             }
         } else {
             $error_message = "User not found.";
@@ -110,14 +70,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
 <div class="container" id="login">
     <h1 class="form-title">Login</h1>
 
-    <!-- Display success message -->
     <?php if ($success_message): ?>
         <div class="success-main">
             <p><?php echo $success_message; ?></p>
         </div>
     <?php endif; ?>
 
-    <!-- Display error messages -->
     <?php if (!empty($errors) || $error_message): ?>
         <div class="error-main">
             <?php foreach ($errors as $error): ?>
@@ -138,6 +96,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
         <div class="input-group">
             <i class="fas fa-eye" id="eye"></i>
             <input type="password" name="password" id="password" placeholder="Password" required>
+        </div>
+        <div>
+            <label>
+                <input type="checkbox" name="remember_me"> Remember Me
+            </label>
         </div>
         <div class="links" style="text-align: left">
             <a href="forgotPassword.php">Forgot password</a><br><br>
