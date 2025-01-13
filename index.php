@@ -12,7 +12,7 @@ $error_message = null;
 $errors = [];
 
 // Check if the "remember_me" cookie exists for auto-login
-if (!isset($_SESSION['UserID']) && isset($_COOKIE['remember_me'])) {
+if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_me'])) {
     $token = $_COOKIE['remember_me'];
 
     // Validate the token against the database
