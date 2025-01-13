@@ -1,6 +1,5 @@
 <?php
 session_start();
-
 // Database connection
 $servername = "localhost";
 $username = "root";
@@ -63,7 +62,6 @@ $result = $conn->query($sql);
 </head>
 <body>
 
-<<<<<<< HEAD
 <!-- Display cart message if set -->
 <?php if (isset($_SESSION['cart_message'])): ?>
     <div class="cart-message">
@@ -75,8 +73,6 @@ $result = $conn->query($sql);
 <?php endif; ?>
 
 <!--page1-->
-=======
->>>>>>> adbd6d3fa58e72e58b609cf56bcafb6a21d5e6ec
 <div class="shop">
     <div class="content">
         <h1>Our Shop</h1>
@@ -93,8 +89,6 @@ $result = $conn->query($sql);
 <!-- Product Section -->
 <section class="product" id="product">
     <div class="box-container">
-<<<<<<< HEAD
-
         <?php
 
         if ($result->num_rows > 0) {
@@ -151,6 +145,7 @@ $result = $conn->query($sql);
     <!-- Display products from the database -->
     <?php if ($result->num_rows > 0): ?>
         <div class="product-list">
+        <?php if ($result->num_rows > 0): ?>
             <?php while ($row = $result->fetch_assoc()): ?>
                 <div class="box" data-id="<?php echo $row['ProductID']; ?>">
                     <span class="discount">-<?php echo $row['DiscountPercentage']; ?>%</span>
@@ -172,10 +167,10 @@ $result = $conn->query($sql);
                     </div>
                 </div>
             <?php endwhile; ?>
-        </div>
-    <?php else: ?>
-        <p>No products found.</p>
-    <?php endif; ?>
+        <?php else: ?>
+            <p>No products found.</p>
+        <?php endif; ?>
+    </div>
 </section>
 
 <!--Modal Section-->
