@@ -72,6 +72,7 @@ $result = $conn->query($sql);
     </div>
 <?php endif; ?>
 
+
 <!--page1-->
 <div class="shop">
     <div class="content">
@@ -90,50 +91,45 @@ $result = $conn->query($sql);
 <section class="product" id="product">
     <div class="box-container">
         <?php
-
         if ($result->num_rows > 0) {
+            while($row = $result->fetch_assoc()) {
+                $productID = $row['ProductID'];
+                $productName = $row['ProductName'];
+                $imageURL = $row['ImageURL'];
+                $discountPercentage = $row['DiscountPercentage'];
+                $currentPrice = $row['CurrentPrice'];
+                $originalPrice = $row['OriginalPrice'];
+                ?>
+                <!-- Display product box -->
+                <div class="box">
+                    <span class="discount"> -<?php echo $discountPercentage; ?>% </span>
+                    <div class="image">
+                        <img src="<?php echo $imageURL; ?>" alt="<?php echo $productName; ?>">
+                        <div class="icons">
+                            <button class="add-to-wishlist">
+                                <a href="wishlist.php?add_to_wishlist=<?php echo $productID; ?>">❤️</a>
+                            </button>
 
-        while($row = $result->fetch_assoc()) {
+                            <form action="addToCart.php" method="POST" style="display: inline;">
+                                <input type="hidden" name="ProductID" value="<?php echo $productID; ?>">
+                                <button type="submit" class="cart-btn">Add to cart</button>
+                            </form>
 
-        $productID = $row['ProductID'];
-        $productName = $row['ProductName'];
-        $imageURL = $row['ImageURL'];
-        $discountPercentage = $row['DiscountPercentage'];
-        $currentPrice = $row['CurrentPrice'];
-        $originalPrice = $row['OriginalPrice'];
-        ?>
-            <!-- Display product box -->
-            <div class="box">
-                <span class="discount"> -<?php echo $discountPercentage; ?>% </span>
-                <div class="image">
-                    <img src="<?php echo $imageURL; ?>" alt="<?php echo $productName; ?>">
-                    <div class="icons">
-                        <button class="add-to-wishlist">
-                            <a href="wishlist.php?add_to_wishlist=<?php echo $productID; ?>">❤️</a>
-
-                        </button>
-
-                        <form action="addToCart.php" method="POST" style="display: inline;">
-                            <input type="hidden" name="ProductID" value="<?php echo $productID; ?>">
-                            <button type="submit" class="cart-btn">Add to cart</button>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <h3><?php echo $productName; ?></h3>
+                        <div class="price">$<?php echo $currentPrice; ?> <span>$<?php echo $originalPrice; ?></span>
+                        </div>
+                        <!-- Add Edit Button -->
+                        <form action="edit.php" method="get">
+                            <input type="hidden" name="productID" value="<?php echo $productID; ?>">
+                            <button type="submit" class="edit-btn">Edit Product</button>
                         </form>
-
                     </div>
                 </div>
-                <div class="content">
-                    <h3><?php echo $productName; ?></h3>
-                    <div class="price">$<?php echo $currentPrice; ?> <span>$<?php echo $originalPrice; ?></span>
-                    </div>
-                    <!-- Add Edit Button -->
-                    <form action="edit.php" method="get">
-                        <input type="hidden" name="productID" value="<?php echo $productID; ?>">
-                        <button type="submit" class="edit-btn">Edit Product</button>
-                    </form>
-                </div>
-            </div>
-
-            <?php
-        }
+                <?php
+            }
         } else {
             echo "<p>No products found.</p>";
         }
@@ -141,11 +137,10 @@ $result = $conn->query($sql);
     </div>
     </div>
 
-<!--add a product-->
+    <!--add a product-->
     <!-- Display products from the database -->
     <?php if ($result->num_rows > 0): ?>
         <div class="product-list">
-        <?php if ($result->num_rows > 0): ?>
             <?php while ($row = $result->fetch_assoc()): ?>
                 <div class="box" data-id="<?php echo $row['ProductID']; ?>">
                     <span class="discount">-<?php echo $row['DiscountPercentage']; ?>%</span>
@@ -167,10 +162,11 @@ $result = $conn->query($sql);
                     </div>
                 </div>
             <?php endwhile; ?>
-        <?php else: ?>
-            <p>No products found.</p>
-        <?php endif; ?>
-    </div>
+        </div>
+    <?php else: ?>
+        <p>No products found.</p>
+    <?php endif; ?>
+
 </section>
 
 <!--Modal Section-->
