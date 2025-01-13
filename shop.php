@@ -56,7 +56,7 @@ $result = $conn->query($sql);
 <head>
     <meta charset="UTF-8">
     <title>Shop</title>
-    <link rel="stylesheet" href="http://localhost/FlowerShop/shop.css">
+    <link rel="stylesheet" href="shop.css">
     <link href="https://fonts.googleapis.com/css2?family=Diphylleia&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="http://localhost/FlowerShop/edit-container.css">
 </head>

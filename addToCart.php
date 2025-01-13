@@ -27,7 +27,7 @@ if ($conn->connect_error) {
 
 // Ensure POST data is set and valid
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ProductID']) && !empty($_POST['ProductID']) && is_numeric($_POST['ProductID'])) {
-    $UserID = $_SESSION['UserID'];
+    $UserID = $_SESSION['user_id'];
     $ProductID = intval($_POST['ProductID']); // Ensure it's an integer
 
     // Check if the product is already in the cart
