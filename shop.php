@@ -1,4 +1,5 @@
 <?php
+session_start();
 // Database connection
 $servername = "localhost";
 $username = "root";
@@ -28,6 +29,16 @@ $result = $conn->query($sql);
 </head>
 <body>
 
+<!-- Display cart message if set -->
+<?php if (isset($_SESSION['cart_message'])): ?>
+    <div class="cart-message">
+        <?php
+        echo $_SESSION['cart_message'];
+        unset($_SESSION['cart_message']);
+        ?>
+    </div>
+<?php endif; ?>
+
 <!--page1-->
 <div class="shop">
     <div class="content">
@@ -37,7 +48,7 @@ $result = $conn->query($sql);
             <button type="submit" class="admin-btn">Add Product</button>
         </form>
     </div>
-    </div>
+</div>
 </div>
 
 
@@ -50,47 +61,47 @@ $result = $conn->query($sql);
 
         if ($result->num_rows > 0) {
 
-        while($row = $result->fetch_assoc()) {
+            while($row = $result->fetch_assoc()) {
 
-        $productID = $row['ProductID'];
-        $productName = $row['ProductName'];
-        $imageURL = $row['ImageURL'];
-        $discountPercentage = $row['DiscountPercentage'];
-        $currentPrice = $row['CurrentPrice'];
-        $originalPrice = $row['OriginalPrice'];
-        ?>
-            <!-- Display product box -->
-            <div class="box">
-                <span class="discount"> -<?php echo $discountPercentage; ?>% </span>
-                <div class="image">
-                    <img src="<?php echo $imageURL; ?>" alt="<?php echo $productName; ?>">
-                    <div class="icons">
-                        <button class="add-to-wishlist">
-                            <a href="wishlist.php?add_to_wishlist=<?php echo $productID; ?>">❤️</a>
+                $productID = $row['ProductID'];
+                $productName = $row['ProductName'];
+                $imageURL = $row['ImageURL'];
+                $discountPercentage = $row['DiscountPercentage'];
+                $currentPrice = $row['CurrentPrice'];
+                $originalPrice = $row['OriginalPrice'];
+                ?>
+                <!-- Display product box -->
+                <div class="box">
+                    <span class="discount"> -<?php echo $discountPercentage; ?>% </span>
+                    <div class="image">
+                        <img src="<?php echo $imageURL; ?>" alt="<?php echo $productName; ?>">
+                        <div class="icons">
+                            <button class="add-to-wishlist">
+                                <a href="wishlist.php?add_to_wishlist=<?php echo $productID; ?>">â¤ï¸</a>
 
-                        </button>
+                            </button>
 
-                        <form action="addToCart.php" method="POST" style="display: inline;">
+                            <form action="addToCart.php" method="POST" style="display: inline;">
+                                <input type="hidden" name="ProductID" value="<?php echo $productID; ?>">
+                                <button type="submit" class="cart-btn">Add to cart</button>
+                            </form>
+
+                        </div>
+                    </div>
+                    <div class="content">
+                        <h3><?php echo $productName; ?></h3>
+                        <div class="price">$<?php echo $currentPrice; ?> <span>$<?php echo $originalPrice; ?></span>
+                        </div>
+                        <!-- Add Edit Button -->
+                        <form action="edit.php" method="get">
                             <input type="hidden" name="productID" value="<?php echo $productID; ?>">
-                            <button type="submit" class="cart-btn">Add to cart</button>
+                            <button type="submit" class="edit-btn">Edit Product</button>
                         </form>
-
                     </div>
                 </div>
-                <div class="content">
-                    <h3><?php echo $productName; ?></h3>
-                    <div class="price">$<?php echo $currentPrice; ?> <span>$<?php echo $originalPrice; ?></span>
-                    </div>
-                    <!-- Add Edit Button -->
-                    <form action="edit.php" method="get">
-                        <input type="hidden" name="productID" value="<?php echo $productID; ?>">
-                        <button type="submit" class="edit-btn">Edit Product</button>
-                    </form>
-                </div>
-            </div>
 
-            <?php
-        }
+                <?php
+            }
         } else {
             echo "<p>No products found.</p>";
         }
@@ -98,7 +109,7 @@ $result = $conn->query($sql);
     </div>
     </div>
 
-<!--add a product-->
+    <!--add a product-->
     <!-- Display products from the database -->
     <?php if ($result->num_rows > 0): ?>
         <div class="product-list">
