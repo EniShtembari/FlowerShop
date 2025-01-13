@@ -219,3 +219,53 @@ body {
     color: #666;
     font-size: 14px;
 }
+
+
+/* Updated cool button styles */
+
+
+ .admin-btn {
+     all: unset;
+     display: inline-block;
+     background-color: #F1B6D7;
+     color: #9E2A2F;
+     font-size: 18px;
+     padding: 12px 25px;
+     border: 2px solid #F1B6D7;
+     border-radius: 30px;
+     font-family: 'Arial', sans-serif;
+     cursor: pointer;
+     transition: all 0.3s ease;
+     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+     text-transform: uppercase;
+     text-align: center;
+     margin-top: 20px;
+ }
+
+.admin-btn:hover {
+    background-color: #f8a6c1; /* Lighter pink */
+    color: #fff; /* White text */
+    border-color: #f8a6c1;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+
+.edit-btn {
+    display: inline-block;
+    padding: 8px 15px;
+    margin-top: 10px;
+    background-color: #ff6f61;
+    color: #fff;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.edit-btn:hover {
+    background-color: #e6554f;
+}
+
+

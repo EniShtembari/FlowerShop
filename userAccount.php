@@ -46,36 +46,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
         exit();
     }
 
-    // Generate 6-digit verification code
     $verificationCode = random_int(100000, 999999);
 
-    // Hash password
     $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
     $codeExpiration = date('Y-m-d H:i:s', time() + 90);
-    // Save user to database
-    $stmt = $pdo->prepare('INSERT INTO users (firstName, lastName, email, password, verificationCode, codeExpiration, status) 
-                            VALUES (:firstName, :lastName, :email, :password, :verificationCode, :codeExpiration, :status)');
-    $stmt->execute([
-        'firstName' => $firstName,
-        'lastName' => $lastName,
-        'email' => $email,
-        'password' => $hashedPassword,
-        'verificationCode' => $verificationCode,
-        'codeExpiration' => $codeExpiration,
-        'status' => 'unverified',
-    ]);
-
-    // Send verification email
-    $mail = new PHPMailer(true);
 
     try {
+        $stmt = $pdo->prepare('INSERT INTO users (firstName, lastName, email, password, role, profilePicture) 
+                                VALUES (:firstName, :lastName, :email, :password, :role, :profilePicture)');
+        $stmt->execute([
+            'firstName' => $firstName,
+            'lastName' => $lastName,
+            'email' => $email,
+            'password' => $hashedPassword,
+            'role' => 'user',
+            'profilePicture' => null
+        ]);
+
+        $userId = $pdo->lastInsertId();
+
+        $stmt = $pdo->prepare('INSERT INTO verification_codes (id, verificationCode, verificationCodeExpiration, status) 
+                                VALUES (:id, :verificationCode, :verificationCodeExpiration, :status)');
+        $stmt->execute([
+            'id' => $userId,
+            'verificationCode' => $verificationCode,
+            'verificationCodeExpiration' => $codeExpiration,
+            'status' => 'unverified',
+        ]);
+
+        $mail = new PHPMailer(true);
+
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
         $mail->Username = 'noreply.bloomflowers@gmail.com';
-        $mail->Password = 'nbtk lstr ogqa bpoo'; // Use App Password here
-        $mail->SMTPSecure ='tsl';
+        $mail->Password = 'nbtk lstr ogqa bpoo';
+        $mail->SMTPSecure = 'tls';
         $mail->Port = 587;
 
         $mail->SMTPOptions = array(
@@ -94,6 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
         $mail->Body = "Hi $firstName,<br><br>Your verification code is: <b>$verificationCode</b><br><br>Enter this code to verify your email.<br><br>Thanks!";
 
         $mail->send();
+
         $_SESSION['email'] = $email;
         $_SESSION['success'] = 'Registration successful! Check your email for the verification code.';
         header('Location: verify.php');
@@ -105,3 +113,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
         exit();
     }
 }
+?>
