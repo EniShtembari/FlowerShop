@@ -17,6 +17,6 @@ if (isset($_SESSION['UserID'])) {
     $stmt->execute([':id' => $_SESSION['UserID']]);
 }
 
-header('Location: login.php');
+header('Location: index.php');
 exit();
 

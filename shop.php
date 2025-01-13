@@ -1,9 +1,6 @@
 <?php
 session_start();
-<<<<<<< HEAD
-=======
 
->>>>>>> adbd6d3fa58e72e58b609cf56bcafb6a21d5e6ec
 // Database connection
 $servername = "localhost";
 $username = "root";
@@ -154,9 +151,6 @@ $result = $conn->query($sql);
     <!-- Display products from the database -->
     <?php if ($result->num_rows > 0): ?>
         <div class="product-list">
-=======
-        <?php if ($result->num_rows > 0): ?>
->>>>>>> adbd6d3fa58e72e58b609cf56bcafb6a21d5e6ec
             <?php while ($row = $result->fetch_assoc()): ?>
                 <div class="box" data-id="<?php echo $row['ProductID']; ?>">
                     <span class="discount">-<?php echo $row['DiscountPercentage']; ?>%</span>
@@ -178,10 +172,10 @@ $result = $conn->query($sql);
                     </div>
                 </div>
             <?php endwhile; ?>
-        <?php else: ?>
-            <p>No products found.</p>
-        <?php endif; ?>
-    </div>
+        </div>
+    <?php else: ?>
+        <p>No products found.</p>
+    <?php endif; ?>
 </section>
 
 <!--Modal Section-->

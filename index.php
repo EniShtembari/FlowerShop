@@ -13,7 +13,6 @@ unset($_SESSION['success_message']);
 $error_message = null;
 $errors = [];
 
-<<<<<<< HEAD
 // Check if the "remember_me" cookie exists for auto-login
 if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_me'])) {
     $token = $_COOKIE['remember_me'];
@@ -33,9 +32,7 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_me'])) {
     }
 }
 
-=======
 // Handle form submission
->>>>>>> adbd6d3fa58e72e58b609cf56bcafb6a21d5e6ec
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
     $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
     $password = $_POST['password'];
