@@ -70,9 +70,10 @@ $result = $conn->query($sql);
 
                         </button>
 
-
-
-                        <a href="#" class="cart-btn">Add to cart</a>
+                        <form action="addToCart.php" method="POST" style="display: inline;">
+                            <input type="hidden" name="productID" value="<?php echo $productID; ?>">
+                            <button type="submit" class="cart-btn">Add to cart</button>
+                        </form>
 
                     </div>
                 </div>
