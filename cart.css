@@ -1,112 +1,109 @@
-:root {
-    --primary-color: #ffd6dc;        /* Soft pink */
-    --secondary-color: rgba(255, 255, 255, 0.85); /* Translucent white */
-    --accent-color: #4A90E2;         /* Cornflower blue */
-    --text-color: #2C3E50;           /* Dark blue-grey */
-    --hover-color: #FF7AA2;          /* Vibrant pink */
-    --shadow-color: rgba(0, 0, 0, 0.1); /* Subtle shadow */
-    --transition-speed: 0.3s;
-    --font-family: 'Inter', Arial, sans-serif;
-}
-
-* {
+/* General Body Styles */
+body {
+    font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+    background-color: #fdf6f9;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
-body {
-    font-family: var(--font-family);
-    background: var(--primary-color);
-    color: var(--text-color);
-    line-height: 1.6;
-}
-
-header {
+/* Header */
+h1 {
     text-align: center;
-    padding: 2rem;
-    background: var(--accent-color);
-    color: var(--secondary-color);
-    box-shadow: 0 4px 8px var(--shadow-color);
+    font-size: 2em;
+    color: #d32e5e;
+    margin: 20px 0;
 }
 
-header h1 {
-    font-size: 2.5rem;
+/* Cart Container */
+.cart-container {
+    width: 90%;
+    max-width: 900px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: auto;
+}
+
+/* Table Styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    text-align: left;
+}
+
+table th, table td {
+    padding: 12px;
+}
+
+table th {
+    background-color: #f9dde4;
+    color: #d32e5e;
+    font-size: 1em;
+    text-transform: uppercase;
+    border-bottom: 2px solid #d32e5e;
+}
+
+table td {
+    background-color: #fff;
+    border-bottom: 1px solid #f2f2f2;
+}
+
+table tr:last-child td {
+    border-bottom: none;
+}
+
+/* Product Info Styles */
+.product-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.product-info img {
+    width: 70px;
+    height: auto;
+    border-radius: 5px;
+}
+
+/* Total Price Section */
+.total-price {
+    text-align: right;
+    font-size: 1.5em;
+    color: #d32e5e;
+    margin-top: 20px;
     font-weight: bold;
 }
 
-main {
-    padding: 2rem;
-    margin: 2rem auto;
-    max-width: 900px;
-    background: var(--secondary-color);
-    border-radius: 8px;
-    box-shadow: 0 4px 8px var(--shadow-color);
-}
-
-.product-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 2rem;
-    justify-content: center;
-}
-
-.product {
-    background: #fff;
-    border-radius: 8px;
-    padding: 1.5rem;
-    box-shadow: 0 4px 8px var(--shadow-color);
-    width: 250px;
-    text-align: center;
-    transition: transform var(--transition-speed);
-}
-
-.product:hover {
-    transform: translateY(-5px);
-}
-
-.product h2 {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-    color: #9a1159;
-}
-
-.product p {
-    font-size: 1.2rem;
-    margin-bottom: 1.5rem;
-}
-
-button.add-to-cart {
-    padding: 0.5rem 1rem;
-    background: var(--accent-color);
-    color: var(--secondary-color);
+/* Buttons */
+button {
+    padding: 10px 15px;
+    background-color: #d32e5e;
+    color: #fff;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: background var(--transition-speed);
+    font-size: 1em;
+    margin: 10px 0;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease;
 }
 
-button.add-to-cart:hover {
-    background: var(--hover-color);
+button:hover {
+    background-color: #a32247;
 }
 
-footer {
+/* Quantity Input */
+.quantity-input {
+    width: 50px;
     text-align: center;
-    padding: 1rem;
-    background: var(--accent-color);
-    color: var(--secondary-color);
-    margin-top: 2rem;
-    border-radius: 8px;
-}
-
-footer a {
-    color: var(--secondary-color);
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 1.1rem;
-}
-
-footer a:hover {
-    color: var(--hover-color);
-    text-decoration: underline;
+    border: 1px solid #f2f2f2;
+    border-radius: 5px;
+    padding: 5px;
 }

@@ -7,7 +7,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 // Check if the user is logged in
-if (!isset($_SESSION['UserID'])) {
+if (!isset($_SESSION['user_id'])) {
     header("Location: index.php");
     exit;
 }
@@ -46,6 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ProductID']) && !empt
         $addCart = $conn->prepare("INSERT INTO cart (UserID, ProductID, Quantity) VALUES (?, ?, 1)");
         $addCart->bind_param("ii", $UserID, $ProductID);
         $addCart->execute();
+        $_SESSION['cart_message'] = "Product has been added to your cart!";
     }
 
     // Redirect back to shop page

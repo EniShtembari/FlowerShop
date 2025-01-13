@@ -1,4 +1,5 @@
 <?php
+session_start();
 // Database connection
 $servername = "localhost";
 $username = "root";
@@ -27,6 +28,16 @@ $result = $conn->query($sql);
     <link href="https://fonts.googleapis.com/css2?family=Diphylleia&display=swap" rel="stylesheet">
 </head>
 <body>
+
+<!-- Display cart message if set -->
+<?php if (isset($_SESSION['cart_message'])): ?>
+    <div class="cart-message">
+        <?php
+        echo $_SESSION['cart_message'];
+        unset($_SESSION['cart_message']);
+        ?>
+    </div>
+<?php endif; ?>
 
 <!--page1-->
 <div class="shop">
@@ -71,7 +82,7 @@ $result = $conn->query($sql);
                         </button>
 
                         <form action="addToCart.php" method="POST" style="display: inline;">
-                            <input type="hidden" name="productID" value="<?php echo $productID; ?>">
+                            <input type="hidden" name="ProductID" value="<?php echo $productID; ?>">
                             <button type="submit" class="cart-btn">Add to cart</button>
                         </form>
 
