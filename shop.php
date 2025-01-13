@@ -1,9 +1,6 @@
 <?php
 session_start();
-<<<<<<< HEAD
-=======
 
->>>>>>> adbd6d3fa58e72e58b609cf56bcafb6a21d5e6ec
 // Database connection
 $servername = "localhost";
 $username = "root";
@@ -66,20 +63,6 @@ $result = $conn->query($sql);
 </head>
 <body>
 
-<<<<<<< HEAD
-<!-- Display cart message if set -->
-<?php if (isset($_SESSION['cart_message'])): ?>
-    <div class="cart-message">
-        <?php
-        echo $_SESSION['cart_message'];
-        unset($_SESSION['cart_message']);
-        ?>
-    </div>
-<?php endif; ?>
-
-<!--page1-->
-=======
->>>>>>> adbd6d3fa58e72e58b609cf56bcafb6a21d5e6ec
 <div class="shop">
     <div class="content">
         <h1>Our Shop</h1>
@@ -96,67 +79,7 @@ $result = $conn->query($sql);
 <!-- Product Section -->
 <section class="product" id="product">
     <div class="box-container">
-<<<<<<< HEAD
-
-        <?php
-
-        if ($result->num_rows > 0) {
-
-        while($row = $result->fetch_assoc()) {
-
-        $productID = $row['ProductID'];
-        $productName = $row['ProductName'];
-        $imageURL = $row['ImageURL'];
-        $discountPercentage = $row['DiscountPercentage'];
-        $currentPrice = $row['CurrentPrice'];
-        $originalPrice = $row['OriginalPrice'];
-        ?>
-            <!-- Display product box -->
-            <div class="box">
-                <span class="discount"> -<?php echo $discountPercentage; ?>% </span>
-                <div class="image">
-                    <img src="<?php echo $imageURL; ?>" alt="<?php echo $productName; ?>">
-                    <div class="icons">
-                        <button class="add-to-wishlist">
-                            <a href="wishlist.php?add_to_wishlist=<?php echo $productID; ?>">❤️</a>
-
-                        </button>
-
-                        <form action="addToCart.php" method="POST" style="display: inline;">
-                            <input type="hidden" name="ProductID" value="<?php echo $productID; ?>">
-                            <button type="submit" class="cart-btn">Add to cart</button>
-                        </form>
-
-                    </div>
-                </div>
-                <div class="content">
-                    <h3><?php echo $productName; ?></h3>
-                    <div class="price">$<?php echo $currentPrice; ?> <span>$<?php echo $originalPrice; ?></span>
-                    </div>
-                    <!-- Add Edit Button -->
-                    <form action="edit.php" method="get">
-                        <input type="hidden" name="productID" value="<?php echo $productID; ?>">
-                        <button type="submit" class="edit-btn">Edit Product</button>
-                    </form>
-                </div>
-            </div>
-
-            <?php
-        }
-        } else {
-            echo "<p>No products found.</p>";
-        }
-        ?>
-    </div>
-    </div>
-
-<!--add a product-->
-    <!-- Display products from the database -->
-    <?php if ($result->num_rows > 0): ?>
-        <div class="product-list">
-=======
         <?php if ($result->num_rows > 0): ?>
->>>>>>> adbd6d3fa58e72e58b609cf56bcafb6a21d5e6ec
             <?php while ($row = $result->fetch_assoc()): ?>
                 <div class="box" data-id="<?php echo $row['ProductID']; ?>">
                     <span class="discount">-<?php echo $row['DiscountPercentage']; ?>%</span>
