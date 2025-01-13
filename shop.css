@@ -141,22 +141,22 @@ body {
     transition: background 0.3s;
 }
 
-.product .box-container .box .image .icons .cart-btn {
-    font-weight: bold;
-    background: #4caf50;
-    color: white;
-    border-radius: 0 0 5px 5px; /* Rounded corners for the bottom */
-    width: 100%; /* Make it span across */
-    margin: 0;
-}
+/*.product .box-container .box .image .icons .cart-btn {*/
+/*    font-weight: bold;*/
+/*    background: #4caf50;*/
+/*    color: white;*/
+/*    border-radius: 0 0 5px 5px; !* Rounded corners for the bottom *!*/
+/*    width: 100%; !* Make it span across *!*/
+/*    margin: 0;*/
+/*}*/
 
 .product .box-container .box .image .icons a:hover {
     background: #e05555;
 }
 
-.product .box-container .box .image .icons .cart-btn:hover {
-    background: #3e8e41;
-}
+/*.product .box-container .box .image .icons .cart-btn:hover {*/
+/*    background: #3e8e41;*/
+/*}*/
 
 /* Product Details */
 .product .box-container .box .content {
@@ -250,23 +250,8 @@ body {
 }
 
 
-.edit-btn {
-    display: inline-block;
-    padding: 8px 15px;
-    margin-top: 10px;
-    background-color: #ff6f61;
-    color: #fff;
-    font-size: 14px;
-    font-weight: bold;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
 
-.edit-btn:hover {
-    background-color: #e6554f;
-}
+
 
 .cart-message {
     background-color: #4CAF50; /* Green background */

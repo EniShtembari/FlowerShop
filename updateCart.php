@@ -35,5 +35,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cartID']) && isset($_
 // Redirect back to the cart
 header("Location: cart.php");
 exit;
+<<<<<<< HEAD
 ?>
+=======
+>>>>>>> adbd6d3fa58e72e58b609cf56bcafb6a21d5e6ec
 
