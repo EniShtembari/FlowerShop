@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// Database connection
+
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -67,16 +67,16 @@ $result = $conn->query($sql);
     <div class="content">
         <h1>Our Shop</h1>
         <?php if (!empty($message)) echo "<p>$message</p>"; ?>
-        <!-- Show "Go to Admin" button only if the user is an admin -->
+
         <?php if (!empty($_SESSION['isAdmin']) && $_SESSION['isAdmin']): ?>
             <form action="admin.php" method="get">
-                <button type="submit" class="admin-btn">Go to Admin</button>
+                <button type="submit" class="admin-btn">Add Product</button>
             </form>
         <?php endif; ?>
     </div>
 </div>
 
-<!-- Product Section -->
+
 <section class="product" id="product">
     <div class="box-container">
         <?php if ($result->num_rows > 0): ?>
@@ -107,7 +107,6 @@ $result = $conn->query($sql);
     </div>
 </section>
 
-<!--Modal Section-->
 <div class="modal" id="edit-modal">
     <form action="shop.php" method="post">
         <h2>Edit Product</h2>

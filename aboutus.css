@@ -371,72 +371,118 @@
 }
 
 
-/*review-section*/
+/* General Section Styling */
+.our-process {
+    padding: 4rem 2rem;
+    background: linear-gradient(to bottom, #ffe6f0, #fff);
+    text-align: center;
+    position: relative;
+}
 
-.review .box-container {
+.our-process .heading {
+    font-size: 2.5rem;
+    color: #d9534f;
+    margin-bottom: 3rem;
+    animation: heading-pop 1s ease-in-out; /* Pop-in effect */
+}
+
+/* Timeline Styling */
+.process-timeline {
     display: flex;
-    background-image: url("composition/pinkbc.jpg");
-    background-size: cover;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 75px;
-    padding-top: 2px;
-    margin-bottom: 30px;
-    padding-bottom: 30px;
-}
-.latest{
-    background-color: #ffffff;
-}
-.customer{
-    /*background-color: #fff0f3;*/
-    background-image: url("composition/pinkbc.jpg");
-}
-
-.review .box-container .box {
-    flex: 1 1 calc(33.333% - 1rem); /* Adjusted percentage to maintain 3 items per row */
-    border-radius: 0.5rem;
-    padding: 2rem;
+    align-items: flex-start;
+    gap: 3rem;
     position: relative;
-    background: #f9f9f9;
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
-    max-width: 320px; /* Fixed width to prevent zoom affecting layout */
-    min-width: 200px; /* Fixed minimum width */
 }
 
-.review .box-container .box .stars i {
-    color: #ff6666;
-    font-size: 1.5rem;
+.process-step {
+    width: 280px;
+    text-align: center;
+    transform: translateY(20px);
+    opacity: 0;
+    transition: all 0.6s ease-out;
+    animation: fade-slide 0.8s ease forwards; /* Initial animation */
 }
 
-.review .box-container .box p {
-    color: #666;
-    font-size: 23px;
-    line-height: 1.6;
+.process-step:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.process-step:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+.process-step h3 {
+    font-size: 1.4rem;
+    color: #d9534f;
     margin-top: 1rem;
+    transition: transform 0.3s ease, color 0.3s ease; /* Text hover effects */
 }
 
-.review .box-container .box .user {
-    display: flex;
-    align-items: center;
-    margin-top: 1.5rem;
+.process-step h3:hover {
+    transform: scale(1.1);
+    color: #a94442;
 }
 
-.review .box-container .box .user img {
-    height: 4rem;
-    width: 4rem;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-right: 1rem;
-}
-
-.review .box-container .box .user h3 {
-    font-size: 1.2rem;
+.process-step p {
+    font-size: 1rem;
     color: #333;
+    margin-top: 0.5rem;
+    line-height: 1.6;
+    transition: transform 0.3s ease, color 0.3s ease; /* Text hover effects */
 }
 
-.review .box-container .box .user span {
-    font-size: 0.9rem;
-    color: #999;
+.process-step p:hover {
+    transform: scale(1.05);
+    color: #555;
 }
+
+/* Circular Image Styling */
+.circle-image {
+    width: 150px;
+    height: 150px;
+    margin: 0 auto;
+    overflow: hidden;
+    border-radius: 50%;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.6s ease, box-shadow 0.4s ease;
+}
+
+.circle-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.circle-image:hover {
+    transform: rotate(360deg) scale(1.1); /* Spin and scale effect */
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Keyframes for Animations */
+@keyframes fade-slide {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes heading-pop {
+    0% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+
 
 

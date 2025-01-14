@@ -39,3 +39,20 @@ closeWindow.addEventListener('click', function () {
 
 
 
+document.addEventListener("DOMContentLoaded", function () {
+    const steps = document.querySelectorAll(".process-step");
+
+    const showSteps = () => {
+        steps.forEach((step, index) => {
+            const rect = step.getBoundingClientRect();
+            if (rect.top < window.innerHeight - 100) {
+                setTimeout(() => {
+                    step.classList.add("show");
+                }, index * 200); // Delay based on the index
+            }
+        });
+    };
+
+    window.addEventListener("scroll", showSteps);
+    showSteps(); // Run once to check initial visibility
+});
