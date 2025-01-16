@@ -1,42 +1,70 @@
 <?php
 session_start();
 
-// database connection
+// Database connection
 $pdo = require __DIR__ . '/connect.php';
 if (!isset($pdo)) {
     die('Database connection not established.');
 }
 
-// inicializimi i variablave
+// Initialize variables
 $success_message = $_SESSION['success_message'] ?? null;
 unset($_SESSION['success_message']);
 $error_message = null;
 $errors = [];
 
-// a ekziston "remember_me" cookie per login automatik
+// Check if "remember_me" cookie exists for auto-login
 if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_me'])) {
     $token = $_COOKIE['remember_me'];
 
-    // Validimi
-    $stmt = $pdo->prepare("SELECT id, email, firstName, rememberMe FROM users WHERE rememberMe IS NOT NULL");
-    $stmt->execute();
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    // Validate token from remember_me table
+    $stmt = $pdo->prepare("SELECT user_id, token, expires_at FROM remember_me WHERE token = :token AND expires_at > NOW()");
+    $stmt->execute([':token' => $token]);
+    $rememberMeEntry = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($user && password_verify($token, $user['rememberMe'])) {
-        // logim nqs te dhenat jane te sakta
-        $_SESSION['UserID'] = $user['id'];
-        $_SESSION['email'] = $user['email'];
-        $_SESSION['firstName'] = $user['firstName'];
-        header('Location: homepage.php');
-        exit();
+    if ($rememberMeEntry) {
+        // Fetch user data
+        $stmt = $pdo->prepare("SELECT id, email, firstName FROM users WHERE id = :id");
+        $stmt->execute([':id' => $rememberMeEntry['user_id']]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($user) {
+            // Log in the user
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['email'] = $user['email'];
+            $_SESSION['firstName'] = $user['firstName'];
+
+            // Generate a new token and update remember_me table
+            $new_token = bin2hex(random_bytes(32));
+            $stmt = $pdo->prepare("UPDATE remember_me SET token = :token, expires_at = :expires_at WHERE user_id = :user_id");
+            $stmt->execute([
+                ':token' => $new_token,
+                ':expires_at' => date('Y-m-d H:i:s', strtotime('+30 days')),
+                ':user_id' => $user['id']
+            ]);
+
+            // Update the "remember_me" cookie
+            setcookie('remember_me', $new_token, [
+                'expires' => time() + (86400 * 30), // 30 days
+                'path' => '/',
+                'secure' => true,
+                'httponly' => true,
+                'samesite' => 'Strict'
+            ]);
+
+            header('Location: homepage.php');
+            exit();
+        }
     }
 }
 
+// Handle login form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
     $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
     $password = $_POST['password'];
+    $remember_me = isset($_POST['remember_me']);
 
-    // Validimi inputeve
+    // Input validation
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errors['email'] = 'Invalid email format.';
     }
@@ -51,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($user) {
-            // kontrollon per tentativa logimi
+            // Handle login attempts
             $stmt = $pdo->prepare("SELECT * FROM login_attempts WHERE user_id = :user_id");
             $stmt->execute([':user_id' => $user['id']]);
             $attempts = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -61,31 +89,53 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
             } else {
                 // Verify password
                 if (password_verify($password, $user['password'])) {
-                    // Logini u arrit, fshijme login attempts te ruajtuara nga logimi i gabuar
+                    // Login successful, clear login attempts
                     $stmt = $pdo->prepare("DELETE FROM login_attempts WHERE user_id = :user_id");
                     $stmt->execute([':user_id' => $user['id']]);
 
-                    // user role
-                    $_SESSION['isAdmin'] = ($user['role'] === 'admin');
-
-                    // krijimi i sesionit per userin e loguar
+                    // Set user session
                     $_SESSION['user_id'] = $user['id'];
                     $_SESSION['email'] = $user['email'];
                     $_SESSION['firstName'] = $user['firstName'];
+                    $_SESSION['isAdmin'] = ($user['role'] === 'admin');
+
+                    // Handle "Remember Me" functionality
+                    if ($remember_me) {
+                        $token = bin2hex(random_bytes(32));
+                        $expires_at = date('Y-m-d H:i:s', strtotime('+30 days'));
+
+                        // Insert or update token in the remember_me table
+                        $stmt = $pdo->prepare("
+                            INSERT INTO remember_me (user_id, token, expires_at, created_at)
+                            VALUES (:user_id, :token, :expires_at, NOW())
+                            ON DUPLICATE KEY UPDATE token = :token, expires_at = :expires_at, created_at = NOW()
+                        ");
+                        $stmt->execute([
+                            ':user_id' => $user['id'],
+                            ':token' => $token,
+                            ':expires_at' => $expires_at
+                        ]);
+
+                        // Set the "remember_me" cookie
+                        setcookie('remember_me', $token, [
+                            'expires' => time() + (86400 * 30),
+                            'path' => '/',
+                            'secure' => true,
+                            'httponly' => true,
+                            'samesite' => 'Strict'
+                        ]);
+                    }
 
                     header('Location: homepage.php');
                     exit();
                 } else {
-                    // Failed login attempts
+                    // Handle failed login attempts
                     if (!$attempts) {
-                        // rasti kur gabimi ndodh per here te pare
                         $stmt = $pdo->prepare("INSERT INTO login_attempts (user_id, attempts, lastAttempt) VALUES (:user_id, 1, NOW())");
                         $stmt->execute([':user_id' => $user['id']]);
                     } else {
-                        // update i login attempts ne rast gabimi
                         $new_attempts = $attempts['attempts'] + 1;
 
-                        // bllokim pas 7 tentativash
                         if ($new_attempts >= 7) {
                             $blocked_until = date('Y-m-d H:i:s', strtotime('+30 minutes'));
                             $stmt = $pdo->prepare("UPDATE login_attempts SET attempts = :attempts, lastAttempt = NOW(), blockedUntil = :blockedUntil WHERE user_id = :user_id");
@@ -96,7 +146,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
                             ]);
                             $error_message = "Too many failed attempts. You are blocked for 30 minutes.";
                         } else {
-                            // Increment attempts
                             $stmt = $pdo->prepare("UPDATE login_attempts SET attempts = :attempts, lastAttempt = NOW() WHERE user_id = :user_id");
                             $stmt->execute([':attempts' => $new_attempts, ':user_id' => $user['id']]);
                             $error_message = "Invalid email or password.";
@@ -110,6 +159,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -143,7 +193,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
         </div>
     <?php endif; ?>
 
-    <!-- Login Form -->
+    <!-- Login -->
     <form method="POST" action="">
         <div class="input-group">
             <i class="fas fa-envelope"></i>
@@ -152,6 +202,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
         <div class="input-group">
             <i class="fas fa-eye" id="eye"></i>
             <input type="password" name="password" id="password" placeholder="Password" required>
+        </div>
+        <div class="input-group-checkbox">
+            <input type="checkbox" name="remember_me" id="remember_me">
+            <label for="remember_me">Remember Me</label>
         </div>
         <div class="links" style="text-align: left">
             <a href="forgotPassword.php">Forgot password</a><br><br>
