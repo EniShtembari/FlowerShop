@@ -1,29 +1,29 @@
 <?php
-session_start();  // Start the session
+session_start();
 
-// Include database connection
+// database connection
 $pdo = require __DIR__ . '/connect.php';
 if (!isset($pdo)) {
     die('Database connection not established.');
 }
 
-// Initialize variables
+// inicializimi i variablave
 $success_message = $_SESSION['success_message'] ?? null;
 unset($_SESSION['success_message']);
 $error_message = null;
 $errors = [];
 
-// Check if the "remember_me" cookie exists for auto-login
+// a ekziston "remember_me" cookie per login automatik
 if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_me'])) {
     $token = $_COOKIE['remember_me'];
 
-    // Validate the token against the database
+    // Validimi
     $stmt = $pdo->prepare("SELECT id, email, firstName, rememberMe FROM users WHERE rememberMe IS NOT NULL");
     $stmt->execute();
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($user && password_verify($token, $user['rememberMe'])) {
-        // Token is valid, log the user in
+        // logim nqs te dhenat jane te sakta
         $_SESSION['UserID'] = $user['id'];
         $_SESSION['email'] = $user['email'];
         $_SESSION['firstName'] = $user['firstName'];
@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
     $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
     $password = $_POST['password'];
 
-    // Validate input
+    // Validimi inputeve
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errors['email'] = 'Invalid email format.';
     }
@@ -51,21 +51,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($user) {
-            // Verify password
-            if (password_verify($password, $user['password'])) {
-                // Store user role in the session
-                $_SESSION['isAdmin'] = ($user['role'] === 'admin');
+            // kontrollon per tentativa logimi
+            $stmt = $pdo->prepare("SELECT * FROM login_attempts WHERE user_id = :user_id");
+            $stmt->execute([':user_id' => $user['id']]);
+            $attempts = $stmt->fetch(PDO::FETCH_ASSOC);
 
-                // Set session variables for the logged-in user
-                $_SESSION['user_id'] = $user['id'];
-                $_SESSION['email'] = $user['email'];
-                $_SESSION['firstName'] = $user['firstName'];
-
-                // Redirect to homepage
-                header('Location: homepage.php');
-                exit();
+            if ($attempts && $attempts['blockedUntil'] > date('Y-m-d H:i:s')) {
+                $error_message = "Your account is blocked. Try again after " . $attempts['blockedUntil'];
             } else {
-                $error_message = "Invalid email or password.";
+                // Verify password
+                if (password_verify($password, $user['password'])) {
+                    // Logini u arrit, fshijme login attempts te ruajtuara nga logimi i gabuar
+                    $stmt = $pdo->prepare("DELETE FROM login_attempts WHERE user_id = :user_id");
+                    $stmt->execute([':user_id' => $user['id']]);
+
+                    // user role
+                    $_SESSION['isAdmin'] = ($user['role'] === 'admin');
+
+                    // krijimi i sesionit per userin e loguar
+                    $_SESSION['user_id'] = $user['id'];
+                    $_SESSION['email'] = $user['email'];
+                    $_SESSION['firstName'] = $user['firstName'];
+
+                    header('Location: homepage.php');
+                    exit();
+                } else {
+                    // Failed login attempts
+                    if (!$attempts) {
+                        // rasti kur gabimi ndodh per here te pare
+                        $stmt = $pdo->prepare("INSERT INTO login_attempts (user_id, attempts, lastAttempt) VALUES (:user_id, 1, NOW())");
+                        $stmt->execute([':user_id' => $user['id']]);
+                    } else {
+                        // update i login attempts ne rast gabimi
+                        $new_attempts = $attempts['attempts'] + 1;
+
+                        // bllokim pas 7 tentativash
+                        if ($new_attempts >= 7) {
+                            $blocked_until = date('Y-m-d H:i:s', strtotime('+30 minutes'));
+                            $stmt = $pdo->prepare("UPDATE login_attempts SET attempts = :attempts, lastAttempt = NOW(), blockedUntil = :blockedUntil WHERE user_id = :user_id");
+                            $stmt->execute([
+                                ':attempts' => $new_attempts,
+                                ':blockedUntil' => $blocked_until,
+                                ':user_id' => $user['id']
+                            ]);
+                            $error_message = "Too many failed attempts. You are blocked for 30 minutes.";
+                        } else {
+                            // Increment attempts
+                            $stmt = $pdo->prepare("UPDATE login_attempts SET attempts = :attempts, lastAttempt = NOW() WHERE user_id = :user_id");
+                            $stmt->execute([':attempts' => $new_attempts, ':user_id' => $user['id']]);
+                            $error_message = "Invalid email or password.";
+                        }
+                    }
+                }
             }
         } else {
             $error_message = "User not found.";
