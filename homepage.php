@@ -1,12 +1,10 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['user_id'])) {
-    header('Location: index.php');
+if (!isset($_SESSION['UserID'])) {
+    header('Location: login.php');
     exit();
 }
-
-
 ?>
 <!doctype html>
 <html lang="en">
@@ -19,19 +17,15 @@ if (!isset($_SESSION['user_id'])) {
     <!-- ======CSS====================== -->
     <link rel="stylesheet" href="homepage.css">
     <!-- ======fav-icon====================== -->
-    <link rel="shortcun icon" href="images/fav-icon.png">
+    <link rel="shortcun icon" href="images/firstImage.png">
     <!-- ===========import-poppins-font===== -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="contact-notification-page">
 <!-- ======main================================= -->
 <section id="main">
-
-    <!--btn-->
-    <!--  <input type="checkbox" class="menu-btn" id="menu-btn">  -->
-
     <!-- ======header=========================== -->
     <header>
         <!--**header top**************-->
@@ -41,7 +35,6 @@ if (!isset($_SESSION['user_id'])) {
             <label for="menu-btn" class="menu-btn">
                 <span class="nav-icon"></span>
             </label>
-
             <!--location-->
             <div class="nav-location">
                 <a href="#">
@@ -49,6 +42,7 @@ if (!isset($_SESSION['user_id'])) {
                     Tirane, Albania
                 </a>
             </div>
+
             <!--logo-->
             <a href="#" class="logo">
                 <img src="images/onTop.png" alt="logo">
@@ -56,10 +50,6 @@ if (!isset($_SESSION['user_id'])) {
 
             <!--nav-btn-->
             <div class="nav-btns">
-                <!--search-->
-                <a href="logout.php" class="nav-search">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" ><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/></svg>
-                </a>
                 <!--user-->
                 <a href="myAccount.php" class="nav-user">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" height="1em"  width="1em" ><path d="M304 128a80 80 0 1 0 -160 0 80 80 0 1 0 160 0zM96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM49.3 464H398.7c-8.9-63.3-63.3-112-129-112H178.3c-65.7 0-120.1 48.7-129 112zM0 482.3C0 383.8 79.8 304 178.3 304h91.4C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7H29.7C13.3 512 0 498.7 0 482.3z"/></svg>
@@ -68,6 +58,10 @@ if (!isset($_SESSION['user_id'])) {
                 <a href="cart.php" class="nav-cart">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" height="1em"  width="1em"><path d="M423.3 440.7c0 25.3-20.3 45.6-45.6 45.6s-45.8-20.3-45.8-45.6 20.6-45.8 45.8-45.8c25.4 0 45.6 20.5 45.6 45.8zm-253.9-45.8c-25.3 0-45.6 20.6-45.6 45.8s20.3 45.6 45.6 45.6 45.8-20.3 45.8-45.6-20.5-45.8-45.8-45.8zm291.7-270C158.9 124.9 81.9 112.1 0 25.7c34.4 51.7 53.3 148.9 373.1 144.2 333.3-5 130 86.1 70.8 188.9 186.7-166.7 319.4-233.9 17.2-233.9z"/></svg>
                     <span>0</span>
+                </a>
+                <!--log out-->
+                <a href="javascript:void(0);" class="nav-search">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" height="1em"  width="1em"><path d="M217.9 105.9L340.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L217.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1L32 320c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM352 416l64 0c17.7 0 32-14.3 32-32l0-256c0-17.7-14.3-32-32-32l-64 0c-17.7 0-32-14.3-32-32s14.3-32 32-32l64 0c53 0 96 43 96 96l0 256c0 53-43 96-96 96l-64 0c-17.7 0-32-14.3-32-32s14.3-32 32-32z"/></svg>
                 </a>
             </div>
         </div>
@@ -81,15 +75,13 @@ if (!isset($_SESSION['user_id'])) {
                 <li><a href="shop.php">Shop</a></li>
                 <li>
                     <a href="#">Popular</a>
-
                 </li>
                 <li><a href="#">Order</a></li>
-                <li><a href="#">Contact</a></li>
+                <li><a href="#" id="contactBtn">Contact</a>
             </ul>
         </nav>
 
     </header>
-
 
     <!-- ======content=========================== -->
     <div class="main-content">
@@ -108,21 +100,14 @@ if (!isset($_SESSION['user_id'])) {
     </div>
 </section>
 
-<!-- ======search================================= -->
-<div class="search-bar">
-    <!--search-input-->
-    <form class="search-input">
-        <input type="text" name="search" placeholder="Search For Product">
-        <!--cancel-btn-->
-        <a href="javascript:void(0);" class="search-cancel">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"  height="1em"  width="1em"><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/></svg>
-        </a>
-    </form>
-</div>
 
-<!-- =================login====================== -->
-<div class="form">
-
+<!-- ======== contact notification ============= -->
+<div class="contact-notification-box" id="notification">
+    <h2>Contact Information</h2>
+    <p><strong>Email:  </strong> noreply.bloomflowers@gmail.com </p>
+    <p><strong>Phone:  </strong> +355 592 622 885 122</p>
+    <p><strong>Business Hours: </strong> 24h/7 </p>
+    <p><strong>Address:  </strong>Tirane, Albania; Teodor Keko Str</p>
 </div>
 
 <!-- =================Category================== -->
@@ -411,8 +396,8 @@ if (!isset($_SESSION['user_id'])) {
                   <button>Subscribe</button>
               </div>
        </div>&#45;&#45;-->
-      </div>
-      <!-- ===========bottom======================-->
+    </div>
+    <!-- ===========bottom======================-->
     <div class="footer-bottom">
         <span>Made From Web Dev. Group</span>
         <span>&copy; Copyright 2025 - Web Development</span>

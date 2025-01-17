@@ -46,8 +46,9 @@ ul {
     margin: auto;
     padding: 15px 0px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between; /* Default */
+    position: relative;
 }
 header.header-fix {
     background-color: #ffffff;
@@ -75,6 +76,8 @@ header.header-fix .header-top {
     display: flex;
     justify-content: center;
     align-items: center;
+    position: absolute;
+    left: 0; /* Vendoset në skajin e majtë */
 }
 .nav-location a{
     display: flex;
@@ -92,6 +95,7 @@ header.header-fix .header-top {
     max-width: 180px;
     max-height: 40px;
     display: flex;
+    margin: 0 auto; /* Qendron logon */
 }
 .logo img {
     max-height: 40px;
@@ -105,6 +109,8 @@ header.header-fix .header-top {
     justify-content: center;
     align-items: center;
     grid-gap: 25px;
+    position: absolute;
+    right: 0; /* Vendoset në skajin e djathtë */
 }
 .nav-btns a svg {
     fill: #3f3f3f;
@@ -237,58 +243,7 @@ header.header-fix .header-top {
     align-items: center;
     font-size: 0.9rem;
 }
-/* search-bar */
-.search-bar {
-    width: 100%;
-    height: 40vh;
-    background-color: #ffffff;
-    backdrop-filter: blur(30px);
-    position: fixed;
-    left: 0px;
-    bottom: 0px;
-    display: none;
-    justify-content: center;
-    box-shadow: 2px 2px 30px rgba(0,0,0,0.05);
-    z-index: 101;
-}
-.search-input {
-    width: 90%;
-    border-bottom: 1px solid #d4d4d4;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100px;
-    margin-top: 20px;
-}
-.search-input input {
-    width: 100%;
-    border: none;
-    outline: none;
-    background-color: transparent;
-    font-size: 1.8rem;
-    margin: 0px;
-}
-.search-cancel {
-    fill:var(--main-dark);
-    font-size: 2rem;
-    padding-right: 40px;
-    transition: all ease 0.3s;
-}
-.search-cancel:hover {
-    opacity: 0.8;
-}
-.search-bar-active {
-    display: flex;
-    animation: searchanimation 0.4s;
-}
-@keyframes searchanimation {
-    0% {
-        bottom: -100%;
-    }
-    100% {
-        bottom: 0%;
-    }
-}
+
 /* login */
 
 /* category */
@@ -528,6 +483,52 @@ header.header-fix .header-top {
 .shopping-banner-text a {
     opacity: 0.8;
 }
+
+
+/* notification(contact)*/
+body.contact-notification-page {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--main-light);
+    color: var(--main-dark);
+}
+
+.contact-navbar {
+    background-color: var(--main-dark);
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+}
+
+.contact-navbar a {
+    text-decoration: none;
+    color: white;
+    margin: 0 10px;
+}
+
+.contact-notification-box {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: var(--main-dark);
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    display: none;
+    z-index: 1000;
+}
+
+.contact-notification-box p {
+    margin: 0;
+}
+
+
+
+
 /* services */
 .services {
     display: flex;
