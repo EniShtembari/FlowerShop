@@ -1,8 +1,49 @@
-/* General Body Styles */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%; /* Ensure the body spans the full viewport height */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header */
+header {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    padding: 10px 20px;
+}
+
+/* Main Content */
+.cart-container {
+    flex: 1; /* Push the footer to the bottom */
+    margin-top: 70px; /* Leave space for the fixed header */
+    margin-bottom: 50px; /* Leave space for the fixed footer */
+    padding: 20px;
+    background-color: #f8f8f8; /* Adjust as needed */
+}
+
+/* Footer */
+footer {
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    background-color: #fff;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    padding: 10px 20px;
+}
+
 body {
     font-family: 'Arial', sans-serif;
     margin: 0;
-    padding: 0;
+    padding-top: 70px;
+    padding-bottom: 50px;
     background-color: #fdf6f9;
     color: #333;
     display: flex;
@@ -81,24 +122,6 @@ table tr:last-child td {
     font-weight: bold;
 }
 
-/* Buttons */
-button {
-    padding: 10px 15px;
-    background-color: #d32e5e;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1em;
-    margin: 10px 0;
-    text-transform: uppercase;
-    transition: background-color 0.3s ease;
-}
-
-button:hover {
-    background-color: #a32247;
-}
-
 /* Quantity Input */
 .quantity-input {
     width: 50px;
@@ -106,4 +129,58 @@ button:hover {
     border: 1px solid #f2f2f2;
     border-radius: 5px;
     padding: 5px;
+}
+
+/* Container for the buttons */
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+/* Style for the Continue shopping button */
+.continue-shopping {
+    background-color: #d32e5e;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.continue-shopping:hover {
+    background-color: #d32e5e;
+}
+
+.checkout-button {
+    background-color: #d32e5e;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: auto;
+}
+
+.checkout-button:hover {
+    background-color: #d32e5e;
+}
+
+@media screen and (max-width: 768px) {
+    .button-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .checkout-button {
+        margin-left: 0;
+        margin-top: 10px;
+    }
 }

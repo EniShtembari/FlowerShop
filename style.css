@@ -196,8 +196,8 @@ body::before {
 }
 
 .input-group-checkbox input[type="checkbox"]:checked {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
+    background-color: #FF97B7;
+    border-color: #FF97B7;
     position: relative;
 }
 

@@ -6,7 +6,7 @@ $errors = [];
 // Check if the user ID is set in the session
 if (!isset($_SESSION['id'])) {
     $_SESSION['errors'] = ['not_logged_in' => 'You must be logged in to view this page.'];
-header('Location: login.php');
+header('Location: index.php');
 exit();
 }
 
