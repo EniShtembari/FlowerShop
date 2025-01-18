@@ -1,11 +1,11 @@
 <?php
-//session_start();
-//
-//if (!isset($_SESSION['User_ID'])) {
-//    header('Location: index.php');
-//    exit();
-//}
-//?>
+session_start();
+
+if (!isset($_SESSION['user_id'])) {
+    header('Location: index.php');
+    exit();
+}
+?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -77,7 +77,7 @@
                     <a href="#">Popular</a>
                 </li>
                 <li><a href="#">Order</a></li>
-                <li><a href="#" id="contactBtn">Contact</a>
+                <li><a href="" id="contactBtn">Contact</a>
             </ul>
         </nav>
 
