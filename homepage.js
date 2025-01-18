@@ -1,14 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    //For Search =====================================//
-    document.addEventListener('click', function (event) {
-        if(event.target.closest('.nav-search')) {
-            document.querySelector('.search-bar').classList.add('search-bar-active');
-        }
-        else  if(event.target.closest('.search-cancel')) {
-            document.querySelector('.search-bar').classList.remove('search-bar-active');
-        }
 
-    });
     //For fix header=============================================//
     const header = document.querySelector('.header');
     let lastScrollY=window.scrollY;
