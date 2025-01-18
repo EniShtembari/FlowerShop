@@ -1,11 +1,11 @@
 <?php
-session_start();
-
-if (!isset($_SESSION['UserID'])) {
-    header('Location: login.php');
-    exit();
-}
-?>
+//session_start();
+//
+//if (!isset($_SESSION['UserID'])) {
+//    header('Location: login.php');
+//    exit();
+//}
+//?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -17,7 +17,7 @@ if (!isset($_SESSION['UserID'])) {
     <!-- ======CSS====================== -->
     <link rel="stylesheet" href="homepage.css">
     <!-- ======fav-icon====================== -->
-    <link rel="shortcun icon" href="images/firstImage.png">
+    <link rel="shortcun icon" href="images/onTop.png">
     <!-- ===========import-poppins-font===== -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

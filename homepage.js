@@ -15,7 +15,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     window.addEventListener('scroll', function () {
         const currentScrollY= window.scrollY;
-        //check if at the top
         if(currentScrollY===0){
             header.classList,remove('header-fix');
         }
@@ -28,4 +27,16 @@ document.addEventListener('DOMContentLoaded', function () {
         lastScrollY=currentScrollY;
     })
 });
+
+
+const contactBtn = document.getElementById('contactBtn');
+const notification = document.getElementById('notification');
+
+contactBtn.addEventListener('click', () => {
+    notification.style.display = 'block';
+    setTimeout(() => {
+        notification.style.display = 'none';
+    }, 10000);
+});
+
 
