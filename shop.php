@@ -52,6 +52,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $sql = "SELECT * FROM products";
 $result = $conn->query($sql);
 ?>
+<?php
+// Include the footer file
+include 'header.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -131,5 +135,9 @@ $result = $conn->query($sql);
     </form>
 </div>
 <script src="edit-product.js"></script>
+<?php
+// Include the footer file
+include 'footer.php';
+?>
 </body>
 </html>

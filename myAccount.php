@@ -1,3 +1,7 @@
+<?php
+// Include the header file
+include 'header.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,20 +11,6 @@
     <link rel="stylesheet" href="myAccount.css">
 </head>
 <body>
-<div class="header">
-    <div class="logo">MyPlatform</div>
-    <nav>
-        <a href="#">Send a Parcel</a>
-        <a href="#">Track My Parcel</a>
-        <a href="aboutus.html">About Us</a>
-        <a href="#">Help</a>
-        <a href="#">Contact Us</a>
-    </nav>
-    <div class="account-actions">
-        <a href="#">My Account</a>
-        <a href="#">Log Out</a>
-    </div>
-</div>
 <main>
     <h1>My Account</h1>
     <div class="account-options">
@@ -60,5 +50,9 @@
         </div>
     </div>
 </main>
+<?php
+// Include the footer file
+include 'footer.php';
+?>
 </body>
 </html>

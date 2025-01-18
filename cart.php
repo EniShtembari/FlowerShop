@@ -1,115 +1,17 @@
 <?php
-//session_start();
-//
-//// Check if the user is logged in
-//if (!isset($_SESSION['user_id'])) {
-//    header("Location: index.php");
-//    exit;
-//}
-//require_once 'stripe/stripe-php/init.php';
-//use Stripe\Stripe;
-//use Stripe\Checkout\Session;
-//// Stripe API Keys
-//$private_key = "sk_test_51QdZaOIA6j8Agjdo5GJTLy0SpIDPNae1bPpzug7GTqcDIUlNR7CKK1ojTH9gGYRe0uEHUjbnpIDGSKukUVTONETg00wfXvfRpk";
-//$public_key = "pk_test_51QdZaOIA6j8AgjdoONN2YmHKTojcogE82ZcF8ntm0l1YwdZNUKNnlDgxb62vZ7IBVbS1NfyGQoRNxjWn6o0bvJxE00alHhiENc";
-//
-//Stripe::setApiKey($private_key);
-//
-//// Database connection
-//$servername = "localhost";
-//$username = "root";
-//$password = "";
-//$dbname = "flowershop";
-//
-//$conn = new mysqli($servername, $username, $password, $dbname);
-//
-//if ($conn->connect_error) {
-//    die("Connection failed: " . $conn->connect_error);
-//}
-//
-//$UserID = $_SESSION['user_id'];
-//if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-//    // Fetch cart items for the user
-//    $sql = "SELECT c.Quantity, p.ProductName, p.ImageURL, p.CurrentPrice,
-//            (c.Quantity * p.CurrentPrice) AS TotalPrice
-//            FROM cart c
-//            JOIN products p ON c.ProductID = p.ProductID
-//            WHERE c.UserID = ?";
-//    $stmt = $conn->prepare($sql);
-//    $stmt->bind_param("i", $UserID);
-//    $stmt->execute();
-//    $result = $stmt->get_result();
-//
-//    $totalPrice = 0;
-//
-//    while ($row = $result->fetch_assoc()) {
-//        $totalPrice += $row['TotalPrice']; // Calculate total price
-//    }
-//
-//    // Validate total price
-//    if ($totalPrice <= 0) {
-//        http_response_code(400);
-//        echo json_encode(["error" => "Your cart is empty."]);
-//        exit;
-//    }
-//
-//    try {
-//        // Create a Payment Intent
-//        $paymentIntent = PaymentIntent::create([
-//            'amount' => $totalPrice * 100, // Convert to cents
-//            'currency' => 'usd',
-//            'payment_method_types' => ['card'],
-//        ]);
-//
-//        // Return the client secret to the frontend
-//        echo json_encode(['clientSecret' => $paymentIntent->client_secret]);
-//    } catch (Exception $e) {
-//        http_response_code(500);
-//        echo json_encode(['error' => $e->getMessage()]);
-//    }
-//    exit;
-//}
-//
-//// Fetch cart items for the user
-//$sql = "SELECT c.CartID, c.Quantity, p.ProductName, p.ImageURL, p.CurrentPrice,
-//        (c.Quantity * p.CurrentPrice) AS TotalPrice
-//        FROM cart c
-//        JOIN products p ON c.ProductID = p.ProductID
-//        WHERE c.UserID = ?";
-//$stmt = $conn->prepare($sql);
-//$stmt->bind_param("i", $UserID);
-//$stmt->execute();
-//$result = $stmt->get_result();
-//$resultItems = $result;
-//
-//$totalPrice = 0;
-//$line_items = []; // Prepare items for Stripe Checkout
-//
-//while ($row = $result->fetch_assoc()) {
-//    $totalPrice += $row['TotalPrice']; // Accumulate the total price
-//
-//    // Add each product to the Stripe line items array
-//    $line_items[] = [
-//        'price_data' => [
-//            'currency' => 'usd',
-//            'product_data' => [
-//                'name' => $row['ProductName'],
-//            ],
-//            'unit_amount' => $row['CurrentPrice'] * 100, // Convert price to cents
-//        ],
-//        'quantity' => $row['Quantity'],
-//    ];
-//}
-//
-//?>
-<?php
+global $public_key;
 session_start();
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
-// Check if the user is logged in
+// Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
     header("Location: index.php");
     exit;
 }
+
+// Load Stripe initialization
+require_once 'stripe_initialization.php';
 
 // Database connection
 $servername = "localhost";
@@ -117,63 +19,122 @@ $username = "root";
 $password = "";
 $dbname = "flowershop";
 
-$conn = new mysqli($servername, $username, $password, $dbname);
+try {
+    $conn = new mysqli($servername, $username, $password, $dbname);
+    if ($conn->connect_error) {
+        throw new Exception("Connection failed: " . $conn->connect_error);
+    }
 
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    $UserID = $_SESSION['user_id'];
+
+    // Fetch total price for the cart
+    $sqlTotal = "SELECT SUM(c.Quantity * p.CurrentPrice) AS TotalPrice
+            FROM cart c
+            JOIN products p ON c.ProductID = p.ProductID
+            WHERE c.UserID = ?";
+    $stmtTotal = $conn->prepare($sqlTotal);
+    if (!$stmtTotal) {
+        throw new Exception("Error preparing total query: " . $conn->error);
+    }
+
+    $stmtTotal->bind_param("i", $UserID);
+    $stmtTotal->execute();
+    $resultTotal = $stmtTotal->get_result();
+    $totalPrice = ($row = $resultTotal->fetch_assoc()) ? $row['TotalPrice'] : 0;
+
+    // Fetch cart items
+    $sqlItems = "SELECT c.CartID, c.ProductID, c.Quantity, p.ProductName, p.ImageURL, p.CurrentPrice, 
+                (c.Quantity * p.CurrentPrice) AS TotalPrice
+            FROM cart c
+            JOIN products p ON c.ProductID = p.ProductID
+            WHERE c.UserID = ?";
+    $stmtItems = $conn->prepare($sqlItems);
+    if (!$stmtItems) {
+        throw new Exception("Error preparing items query: " . $conn->error);
+    }
+
+    $stmtItems->bind_param("i", $UserID);
+    $stmtItems->execute();
+    $resultItems = $stmtItems->get_result();
+
+    // Create line items for Stripe
+    $line_items = [];
+    while ($item = $resultItems->fetch_assoc()) {
+        $line_items[] = [
+            'price_data' => [
+                'currency' => 'usd',
+                'product_data' => [
+                    'name' => $item['ProductName'],
+                ],
+                'unit_amount' => intval($item['CurrentPrice'] * 100),
+            ],
+            'quantity' => $item['Quantity'],
+        ];
+    }
+
+    // Create Stripe Checkout Session
+    $checkout_session = \Stripe\Checkout\Session::create([
+        'payment_method_types' => ['card'],
+        'line_items' => $line_items,
+        'mode' => 'payment',
+        'success_url' => 'http://localhost/flowershop/success.php?session_id={CHECKOUT_SESSION_ID}',
+        'cancel_url' => 'http://localhost/flowershop/cart.php',
+        'metadata' => [
+            'user_id' => $UserID
+        ]
+    ]);
+
+    // Log the checkout attempt
+    $sql = "INSERT INTO api_logs (service_name, request_payload, response_payload, status_code) VALUES (?, ?, ?, ?)";
+    $stmt = $conn->prepare($sql);
+    if (!$stmt) {
+        throw new Exception("Error preparing log entry: " . $conn->error);
+    }
+
+    $service_name = 'stripe_checkout';
+    $request_payload = json_encode([
+        'user_id' => $UserID,
+        'amount' => $totalPrice,
+        'line_items_count' => count($line_items)
+    ]);
+    $response_payload = json_encode([
+        'session_id' => $checkout_session->id,
+        'status' => 'initiated'
+    ]);
+    $status_code = 200;
+
+    $stmt->bind_param("sssi", $service_name, $request_payload, $response_payload, $status_code);
+    $stmt->execute();
+
+} catch (\Stripe\Exception\ApiErrorException $e) {
+    error_log('Stripe API Error: ' . $e->getMessage());
+    $error_message = 'Payment processing error. Please try again later.';
+} catch (\Exception $e) {
+    error_log('Error: ' . $e->getMessage());
+    $error_message = 'An unexpected error occurred. Please try again later.';
 }
-
-$UserID = $_SESSION['user_id'];
-
-// Fetch total price for the cart
-$totalPrice = 0;
-$sqlTotal = "SELECT SUM(c.Quantity * p.CurrentPrice) AS TotalPrice
-        FROM cart c
-        JOIN products p ON c.ProductID = p.ProductID
-        WHERE c.UserID = ?";
-$stmtTotal = $conn->prepare($sqlTotal);
-$stmtTotal->bind_param("i", $UserID);
-$stmtTotal->execute();
-$resultTotal = $stmtTotal->get_result();
-
-if ($row = $resultTotal->fetch_assoc()) {
-    $totalPrice = $row['TotalPrice'];
-}
-
-// Fetch cart items for the table display
-$sqlItems = "SELECT c.CartID, c.Quantity, p.ProductName, p.ImageURL, p.CurrentPrice, 
-            (c.Quantity * p.CurrentPrice) AS TotalPrice
-        FROM cart c
-        JOIN products p ON c.ProductID = p.ProductID
-        WHERE c.UserID = ?";
-$stmtItems = $conn->prepare($sqlItems);
-$stmtItems->bind_param("i", $UserID);
-$stmtItems->execute();
-$resultItems = $stmtItems->get_result();
-
-
-// Define your public Stripe key
-$public_key = 'your-public-stripe-key-here';
 ?>
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <link rel="stylesheet" href="cart.css">
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+<div class="cart-container">
+    <h1>Your Shopping Cart</h1>
 
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Shopping Cart</title>
-        <link rel="stylesheet" href="cart.css">
-        <script src="https://js.stripe.com/v3/"></script>
-    </head>
-    <body>
-    <?php
-    // Include the header at the very top, before the main content starts
-    require 'header.php';
-    ?>
-    <div class="cart-container">
-        <h1>Your Shopping Cart</h1>
+    <?php if (isset($error_message)): ?>
+        <div class="error-message"><?php echo htmlspecialchars($error_message); ?></div>
+    <?php endif; ?>
+
+    <?php if ($resultItems && $resultItems->num_rows > 0): ?>
         <table>
+            <thead>
             <tr>
                 <th>Product</th>
                 <th>Quantity</th>
@@ -181,10 +142,13 @@ $public_key = 'your-public-stripe-key-here';
                 <th>Total</th>
                 <th>Actions</th>
             </tr>
+            </thead>
+            <tbody>
             <?php
+            // Reset the result pointer
+            $resultItems->data_seek(0);
             while ($row = $resultItems->fetch_assoc()): ?>
                 <tr>
-                    <!-- Product Image and Name -->
                     <td>
                         <div class="product-info">
                             <img src="<?php echo htmlspecialchars($row['ImageURL']); ?>"
@@ -192,7 +156,6 @@ $public_key = 'your-public-stripe-key-here';
                             <span><?php echo htmlspecialchars($row['ProductName']); ?></span>
                         </div>
                     </td>
-                    <!-- Quantity -->
                     <td>
                         <form action="updateCart.php" method="POST" style="display: inline;">
                             <input type="hidden" name="cartID" value="<?php echo $row['CartID']; ?>">
@@ -202,81 +165,46 @@ $public_key = 'your-public-stripe-key-here';
                             <button type="submit" name="action" value="increase">+</button>
                         </form>
                     </td>
-                    <!-- Price and Total -->
-                    <td>$<?php echo $row['CurrentPrice']; ?></td>
-                    <td>$<?php echo $row['TotalPrice']; ?></td>
-                    <!-- Delete Action -->
+                    <td>$<?php echo number_format($row['CurrentPrice'], 2); ?></td>
+                    <td>$<?php echo number_format($row['TotalPrice'], 2); ?></td>
                     <td class="actions">
                         <form action="updateCart.php" method="POST" style="display: inline;">
                             <input type="hidden" name="cartID" value="<?php echo $row['CartID']; ?>">
-                            <button type="submit" name="action" value="delete">Delete</button>
+                            <button type="submit" name="action" value="delete" class="delete-btn">Delete</button>
                         </form>
                     </td>
                 </tr>
             <?php endwhile; ?>
+            </tbody>
         </table>
-        <div class="total-price">Total Price: $<?php echo $totalPrice; ?></div>
+
+        <div class="total-price">Total Price: $<?php echo number_format($totalPrice, 2); ?></div>
+
         <div class="button-container">
-            <a href="shop.php" class="button continue-shopping">Continue shopping</a>
-            <button class="checkout-button" id="checkoutButton">Proceed to Checkout</button>
+            <a href="shop.php" class="button continue-shopping">Continue Shopping</a>
+            <button id="checkout-button" class="checkout-button">Proceed to Checkout</button>
         </div>
-    </div>
-    <script>
-        const stripe = Stripe('<?php echo htmlspecialchars($public_key); ?>'); // Your public Stripe key
 
-        document.getElementById('checkoutButton').addEventListener('click', function () {
-            // Send POST request to create a Payment Intent
-            fetch('cart.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
-                .then(function (response) {
-                    if (!response.ok) {
-                        throw new Error('Failed to create a payment intent. Please try again.');
+        <script>
+            const stripe = Stripe('<?php echo $public_key; ?>');
+            const checkoutButton = document.getElementById('checkout-button');
+
+            checkoutButton.addEventListener('click', function() {
+                stripe.redirectToCheckout({
+                    sessionId: '<?php echo $checkout_session->id; ?>'
+                }).then(function(result) {
+                    if (result.error) {
+                        alert(result.error.message);
                     }
-                    return response.json();
-                })
-                .then(function (data) {
-                    if (data.error) {
-                        alert(data.error);
-                        return;
-                    }
-
-                    // Get the client secret from the response
-                    const clientSecret = data.clientSecret;
-
-                    // Confirm the payment using Stripe Elements
-                    stripe.confirmCardPayment(clientSecret, {
-                        payment_method: {
-                            card: {
-                                // Pass the card input here using a Stripe Element (requires additional setup)
-                                // Example: if you have a card element initialized (not shown in this example),
-                                // this would look like: `card: cardElement`
-                            },
-                        },
-                    })
-                        .then(function (result) {
-                            if (result.error) {
-                                // Show error to the customer
-                                alert(result.error.message);
-                            } else if (result.paymentIntent.status === 'succeeded') {
-                                // Payment successful
-                                alert('Payment successful!');
-                                // Redirect or display success
-                                window.location.href = 'success.php';
-                            }
-                        });
-                })
-                .catch(function (error) {
-                    console.error('Error:', error);
-                    alert('An error occurred. Please try again.');
                 });
-        });
-    </script>
-    <?php
-    require 'footer.php';
-    ?>
-    </body>
-    </html>
+            });
+        </script>
+    <?php else: ?>
+        <div class="empty-cart">
+            <p>Your cart is empty</p>
+            <a href="shop.php" class="button continue-shopping">Continue Shopping</a>
+        </div>
+    <?php endif; ?>
+</div>
+</body>
+</html>
