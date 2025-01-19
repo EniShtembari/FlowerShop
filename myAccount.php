@@ -50,6 +50,46 @@ if ($role === 'admin' && isset($_POST['delete_user'])) {
     }
 }
 
+if ($_SERVER["REQUEST_METHOD"] == "POST" && $role !== 'admin') {
+    $firstName = $_POST['firstName'];
+    $lastName = $_POST['lastName'];
+    $email = $_POST['email'];
+    $password = !empty($_POST['password']) ? password_hash($_POST['password'], PASSWORD_DEFAULT) : null;
+
+    // Process profile picture upload
+    $profilePicture = null;
+    if (!empty($_FILES['profilePicture']['name'])) {
+        $profilePicture = time() . "_" . $_FILES['profilePicture']['name'];
+        move_uploaded_file($_FILES['profilePicture']['tmp_name'], "uploads/" . $profilePicture);
+    }
+
+    // Prepare the query for updating user details
+    $update_query = $conn->prepare(
+        $password
+            ? "UPDATE users SET firstName = ?, lastName = ?, email = ?, password = ?, profilePicture = ? WHERE id = ?"
+            : "UPDATE users SET firstName = ?, lastName = ?, email = ?, profilePicture = ? WHERE id = ?"
+    );
+
+    if ($password) {
+        $update_query->bind_param("sssssi", $firstName, $lastName, $email, $password, $profilePicture, $user_id);
+    } else {
+        $update_query->bind_param("ssssi", $firstName, $lastName, $email, $profilePicture, $user_id);
+    }
+
+    $update_query->execute();
+    $_SESSION['message'] = "Profile updated successfully!";
+    header("Location: myAccount.php");
+    exit();
+}
+
+// Fetch current user details for regular users
+if ($role !== 'admin') {
+    $user_query = $conn->prepare("SELECT * FROM users WHERE id = ?");
+    $user_query->bind_param("i", $user_id);
+    $user_query->execute();
+    $user = $user_query->get_result()->fetch_assoc();
+}
+
 // Now include the header after all session and redirect logic
 include 'header.php';
 ?>
@@ -60,122 +100,6 @@ include 'header.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="myAccount.css">
     <title>My Account</title>
-
-    <style>
-        /* General body styling */
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #fce4ec; /* Light pink background */
-            margin: 0;
-            padding: 0;
-        }
-
-        /* Main content styling */
-        main {
-            padding: 20px;
-        }
-
-        /* Heading */
-        h1 {
-            font-size: 2.5rem;
-            color: #d81b60; /* Pink text */
-            text-align: center;
-        }
-
-        /* Alert message styling */
-        .alert {
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 4px;
-        }
-
-        .alert-success {
-            color: #155724;
-            background-color: #d4edda;
-            border-color: #c3e6cb;
-        }
-
-        .alert-danger {
-            color: #721c24;
-            background-color: #f8d7da;
-            border-color: #f5c6cb;
-        }
-
-        /* User list table styling */
-        .user-list {
-            overflow-x: auto;
-            margin: 20px 0;
-        }
-
-        .user-list table {
-            width: 100%;
-            border-collapse: collapse;
-            border-radius: 10px;
-            background-color: #ffffff; /* White background */
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow for a modern look */
-        }
-
-        .user-list th,
-        .user-list td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #f8bbd0; /* Soft pink border for separation */
-        }
-
-        .user-list th {
-            background-color: #f5f5f5; /* Light gray background for headers */
-            color: #d81b60; /* Pink text for headers */
-            font-weight: bold;
-        }
-
-        .user-list tr:hover {
-            background-color: #fce4ec; /* Light pink hover effect on rows */
-        }
-
-        /* Admin section styling */
-        .admin-section h2 {
-            font-size: 2rem;
-            color: #d81b60; /* Pink header color */
-            margin-bottom: 20px;
-        }
-
-        /* Buttons styling */
-        .btn {
-            padding: 8px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-            border: none;
-            margin: 0 5px;
-            display: inline-block;
-            font-size: 1rem;
-            transition: background-color 0.3s ease;
-        }
-
-        /* Edit button */
-        .btn-edit {
-            background-color: #f06292; /* Soft pink */
-            color: white;
-        }
-
-        .btn-edit:hover {
-            background-color: #c2185b; /* Darker pink on hover */
-        }
-
-        /* Delete button */
-        .btn-delete {
-            background-color: #dc3545; /* Red for delete */
-            color: white;
-        }
-
-        .btn-delete:hover {
-            background-color: #c82333; /* Darker red on hover */
-        }
-
-        /* Form styling */
-        form {
-            display: inline-block;
-        }
-    </style>
 
 </head>
 <body>
@@ -249,9 +173,46 @@ include 'header.php';
                 </table>
             </div>
         </div>
-    <?php endif; ?>
+    <?php else: ?>
+    <!-- Regular user profile update section -->
+    <div class="profile">
+        <form method="POST" action="myAccount.php" enctype="multipart/form-data">
+            <?php if (!empty($user['profilePicture'])): ?>
+                <img id="profilePreview" src="uploads/<?= htmlspecialchars($user['profilePicture']) ?>" alt="Profile Picture">
+            <?php else: ?>
+                <img id="profilePreview" src="images/default_profile_picture.jpg" alt="Default Profile Picture">
+            <?php endif; ?>
 
+            <label>First Name:</label>
+            <input type="text" name="firstName" value="<?= htmlspecialchars($user['firstName']) ?>" required>
+
+            <label>Last Name:</label>
+            <input type="text" name="lastName" value="<?= htmlspecialchars($user['LastName']) ?>" required>
+
+            <label>Email:</label>
+            <input type="email" name="email" value="<?= htmlspecialchars($user['email']) ?>" required>
+
+            <label>Password:</label>
+            <input type="password" name="password" placeholder="Enter new password (optional)">
+
+            <label>Profile Picture:</label>
+            <input type="file" name="profilePicture" accept="image/*" onchange="previewImage(event)">
+
+            <button type="submit">Update Profile</button>
+        </form>
+    </div>
+    <?php endif; ?>
 </main>
+<script>
+    function previewImage(event) {
+        const reader = new FileReader();
+        reader.onload = function() {
+            const preview = document.getElementById('profilePreview');
+            preview.src = reader.result;
+        }
+        reader.readAsDataURL(event.target.files[0]);
+    }
+</script>
 
 </body>
 </html>
