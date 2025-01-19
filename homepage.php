@@ -73,9 +73,6 @@ if (!isset($_SESSION['user_id'])) {
                 <li><a href="#">Home</a></li>
                 <li><a href="aboutus.php">About</a></li>
                 <li><a href="shop.php">Shop</a></li>
-                <li>
-                    <a href="#">Popular</a>
-                </li>
                 <li><a href="#">Order</a></li>
                 <li><a href="#" id="contactBtn">Contact</a>
             </ul>

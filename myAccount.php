@@ -54,6 +54,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $role !== 'admin') {
     $firstName = $_POST['firstName'];
     $lastName = $_POST['lastName'];
     $email = $_POST['email'];
+    $profilePicture=$_POST['profilePicture'];
+
     $password = !empty($_POST['password']) ? password_hash($_POST['password'], PASSWORD_DEFAULT) : null;
 
     // Process profile picture upload
@@ -98,7 +100,7 @@ include 'header.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="http://localhost/flowershop/myAccount.css">
+    <link rel="stylesheet" href="myAccount.css">
     <title>My Account</title>
 
 </head>
