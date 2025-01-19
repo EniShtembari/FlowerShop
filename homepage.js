@@ -19,6 +19,15 @@ document.addEventListener('DOMContentLoaded', function () {
     })
 });
 
+const contactBtn1 = document.getElementById('contactBtn1');
+const notification1 = document.getElementById('notification1');
+
+contactBtn1.addEventListener('click', () => {
+    notification.style.display = 'block';
+    setTimeout(() => {
+        notification.style.display = 'none';
+    }, 10000);
+});
 
 const contactBtn = document.getElementById('contactBtn');
 const notification = document.getElementById('notification');
