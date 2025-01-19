@@ -71,7 +71,7 @@ if (!isset($_SESSION['user_id'])) {
             <!--menu-->
             <ul class="menu">
                 <li><a href="#">Home</a></li>
-                <li><a href="aboutus.html">About</a></li>
+                <li><a href="aboutus.php">About</a></li>
                 <li><a href="shop.php">Shop</a></li>
                 <li>
                     <a href="#">Popular</a>
@@ -91,7 +91,7 @@ if (!isset($_SESSION['user_id'])) {
             <h1>Welcome<br>to our shop</h1>
             <p><b>"At Bloom Flowers 🌸 , every petal tells a story <br> of love,
                     beauty, and connection. Discover our <br>passion for crafting stunning floral arrangements that bring joy to every occasion." </b> </p>
-            <a href="aboutus.html">LEARN MORE</a>
+            <a href="aboutus.php">LEARN MORE</a>
         </div>
         <!--img-->
         <div class="main-content-img">
@@ -377,7 +377,7 @@ if (!isset($_SESSION['user_id'])) {
             <strong>Main Link's</strong>
             <ul>
                 <li><a href="homepage.php">Home</a></li>
-                <li><a href="aboutus.html">About</a></li>
+                <li><a href="aboutus.php">About</a></li>
                 <li><a href="shop.php">Shop</a></li>
                 <li><a href="#">Popular</a></li>
                 <li><a href="cart.php">Order</a></li>

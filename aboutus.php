@@ -1,3 +1,8 @@
+
+<?php
+
+include 'header.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -176,5 +181,9 @@
 
 
 <script src="about.js"></script>
+<?php
+// Include the footer file
+include 'footer.php';
+?>
 </body>
 </html>

@@ -1,3 +1,8 @@
+
+<?php
+
+include 'header.php';
+?>
 <?php
 // Database connection
 $conn = new mysqli('localhost', 'root', '', 'flowershop');
@@ -102,6 +107,9 @@ $conn->close();
     </script>
 <?php }
 ?>
-
+<?php
+// Include the footer file
+include 'footer.php';
+?>
 </body>
 </html>

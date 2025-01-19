@@ -64,6 +64,8 @@ if (isset($_GET['productID'])) {
 
     <button type="submit" class="edit-btn">Save Changes</button>
 </form>
+
+<script src="edit-product.js"></script>
 </body>
 </html>
 
