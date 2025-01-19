@@ -2,6 +2,11 @@
 <?php
 session_start();
 
+// Check if user is logged in
+if (!isset($_SESSION['user_id'])) {
+    header("Location: index.php");
+    exit;
+}
 
 $servername = "localhost";
 $username = "root";
@@ -72,6 +77,15 @@ include 'header.php';
     <div class="content">
         <h1>Our Shop</h1>
         <?php if (!empty($message)) echo "<p>$message</p>"; ?>
+        <!-- Display success/error message -->
+        <?php if (!empty($_SESSION['cart_message'])): ?>
+            <div class="cart-message">
+                <p><?php echo htmlspecialchars($_SESSION['cart_message']); ?></p>
+            </div>
+            <?php unset($_SESSION['cart_message']); // Clear the message ?>
+        <?php endif; ?>
+
+        <?php if (!empty($message)) echo "<p>$message</p>"; ?>
 
         <?php if (!empty($_SESSION['isAdmin']) && $_SESSION['isAdmin']): ?>
             <form action="admin.php" method="get">
@@ -96,7 +110,10 @@ include 'header.php';
                         <div class="price">
                             $<?php echo $row['CurrentPrice']; ?> <span>$<?php echo $row['OriginalPrice']; ?></span>
                         </div>
-                        <button class="cart-btn">🛒 Add to Cart</button>
+                        <form action="addToCart.php" method="POST">
+                            <input type="hidden" name="ProductID" value="<?php echo $row['ProductID']; ?>">
+                            <button type="submit" class="cart-btn">🛒 Add to Cart</button>
+                        </form>
                         <!-- Show "Edit Product" button only if the user is an admin -->
                         <?php if (!empty($_SESSION['isAdmin']) && $_SESSION['isAdmin']): ?>
                             <button class="edit-btn" onclick="openModal(<?php echo $row['ProductID']; ?>, '<?php echo $row['ProductName']; ?>', '<?php echo $row['ImageURL']; ?>', <?php echo $row['DiscountPercentage']; ?>, <?php echo $row['CurrentPrice']; ?>, <?php echo $row['OriginalPrice']; ?>)">
