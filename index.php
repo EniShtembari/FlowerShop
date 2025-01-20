@@ -63,9 +63,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
     $password = $_POST['password'];
     $remember_me = isset($_POST['remember_me']);
 
-    // Input validation
+    // validimi
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errors['email'] = 'Invalid email format.';
+    }
+    if (empty($email)) {
+        $errors['email'] = 'Email is required.';
     }
     if (empty($password)) {
         $errors['password'] = 'Password is required.';
@@ -78,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($user) {
-            // Handle login attempts
+            // 7 tentativat e gabuara
             $stmt = $pdo->prepare("SELECT * FROM login_attempts WHERE user_id = :user_id");
             $stmt->execute([':user_id' => $user['id']]);
             $attempts = $stmt->fetch(PDO::FETCH_ASSOC);
