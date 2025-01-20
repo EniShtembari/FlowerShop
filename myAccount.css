@@ -1,5 +1,18 @@
 /* myAccount.css */
 
+/* Ngjyrat e personalizuara */
+:root {
+    --main-color: #ffd6dc;
+    --main-light: #fdf0f2;
+    --main-dark: #f74b65;
+    --product-bg-color: #f8f8f8;
+    --heading-color: #d81b60;
+    --alert-success-bg: #d4edda;
+    --alert-success-border: #c3e6cb;
+    --alert-danger-bg: #f8d7da;
+    --alert-danger-border: #f5c6cb;
+}
+
 /* General styles for the main content */
 body {
     font-family: Arial, sans-serif;
@@ -210,7 +223,7 @@ form {
 }
 
 .user-list th {
-    background-color: #f5f5f5;
+    background-color: #efc6db;
     color: var(--heading-color);
     font-weight: bold;
 }
