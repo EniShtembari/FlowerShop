@@ -23,8 +23,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errors['email'] = 'Invalid email format';
     }
-    if (empty($firstName) || empty($lastName)) {
-        $errors['name'] = 'Name is required';
+    if (empty($firstName) || empty($firstName)) {
+        $errors['firstName'] = 'First name is required';
+    }
+    if (empty($lastName) || empty($lastName)) {
+        $errors['lastName'] = 'Last name is required';
+    }
+    if (empty($email) || empty($email)) {
+        $errors['email'] = 'Email is required';
+    }
+    if (empty($password) || empty($password)) {
+        $errors['password'] = 'Password is required';
+    }
+    if (empty($confirmPassword) || empty($confirmPassword)) {
+        $errors['confirmPassword'] = 'Confirm password is required';
     }
     if (strlen($password) < 8) {
         $errors['password'] = 'Password must be at least 8 characters';

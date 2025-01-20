@@ -1,23 +1,22 @@
 <?php
 session_start();
-
-// Database connection
+// Lidhja me databazen
 $pdo = require __DIR__ . '/connect.php';
 if (!isset($pdo)) {
     die('Database connection not established.');
 }
 
-// Initialize variables
+// Inicializimi i variablave te erroreve
 $success_message = $_SESSION['success_message'] ?? null;
 unset($_SESSION['success_message']);
 $error_message = null;
 $errors = [];
 
-// Check if "remember_me" cookie exists for auto-login
+// Kontrollo nese ekziston remember me cookie
 if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_me'])) {
     $token = $_COOKIE['remember_me'];
 
-    // Validate token from remember_me table
+    // validimi i remember me
     $stmt = $pdo->prepare("SELECT user_id, token, expires_at FROM remember_me WHERE token = :token AND expires_at > NOW()");
     $stmt->execute([':token' => $token]);
     $rememberMeEntry = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -29,12 +28,12 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_me'])) {
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($user) {
-            // Log in the user
+            // Autentikimi i userit
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['email'] = $user['email'];
             $_SESSION['firstName'] = $user['firstName'];
 
-            // Generate a new token and update remember_me table
+            // Gjenerojme token te ri dhe ruaj,me ndryshimet ne databaze
             $new_token = bin2hex(random_bytes(32));
             $stmt = $pdo->prepare("UPDATE remember_me SET token = :token, expires_at = :expires_at WHERE user_id = :user_id");
             $stmt->execute([
@@ -43,11 +42,11 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_me'])) {
                 ':user_id' => $user['id']
             ]);
 
-            // Update the "remember_me" cookie
+            // update remember me cookie
             setcookie('remember_me', $new_token, [
-                'expires' => time() + (86400 * 30), // 30 days
+                'expires' => time() + (86400 * 30), //86400 sec/dit *30 dit
                 'path' => '/',
-                'secure' => true,
+                'secure' => false,
                 'httponly' => true,
                 'samesite' => 'Strict'
             ]);
@@ -120,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
                         setcookie('remember_me', $token, [
                             'expires' => time() + (86400 * 30),
                             'path' => '/',
-                            'secure' => true,
+                            'secure' => false,
                             'httponly' => true,
                             'samesite' => 'Strict'
                         ]);

@@ -10,18 +10,18 @@ require_once 'connect.php';
 
 session_start();
 
-// Check if email exists in the session
+// kontrollon qe emaili ekziston
 $email = $_SESSION['email'] ?? null;
 
 if ($email) {
     $pdo = require 'connect.php';
 
     try {
-        // Generate a new verification code and expiration time
+        // gjeneron nje kod te ri 6 shifror
         $newCode = random_int(100000, 999999);
         $newExpiration = date('Y-m-d H:i:s', time() + 90);
 
-        // Update the verification code and expiration in the database
+        // updaton databazen me kodin dhe kohen e skadimit te ri
         $stmt = $pdo->prepare('UPDATE users SET verificationCode = :verificationCode, codeExpiration = :codeExpiration WHERE email = :email');
         $stmt->execute([
             'verificationCode' => $newCode,
@@ -29,7 +29,7 @@ if ($email) {
             'email' => $email,
         ]);
 
-        // Send the new verification code via email
+        // dergimi i emailit
         $mail = new PHPMailer(true);
         try {
             $mail->isSMTP();
@@ -67,7 +67,7 @@ if ($email) {
     header('Location: verify.php');
     exit();
 } else {
-    // If the email is not in the session, redirect to the registration page
+    //nqs emaili nuk ndodhet ne session kte tek register
     $_SESSION['errors'] = ['Session expired. Please register again.'];
     header('Location: register.php');
     exit();

@@ -180,8 +180,8 @@ include 'header.php';
 
 
 <script src="about.js"></script>
+<script src="timeout.js"></script>
 <?php
-// Include the footer file
 include 'footer.php';
 ?>
 </body>

@@ -111,5 +111,6 @@ $conn->close();
 // Include the footer file
 include 'footer.php';
 ?>
+<script src="timeout.js"></script>
 </body>
 </html>

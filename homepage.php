@@ -418,6 +418,7 @@ if (!isset($_SESSION['user_id'])) {
 
 <!-- ===========script=======================-->
 <script src="homepage.js"></script>
+<script src="timeout.js"></script>
 
 </body>
 </html>

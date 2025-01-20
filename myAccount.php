@@ -214,5 +214,7 @@ include 'header.php';
     }
 </script>
 
+<script src="timeout.js"></script>
+
 </body>
 </html>
