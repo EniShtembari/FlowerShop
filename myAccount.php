@@ -100,6 +100,8 @@ include 'header.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!--<link rel="stylesheet" href="myAccount.css">-->
     <link rel="stylesheet" href="http://localhost/flowershop/myAccount.css">
+    <link rel="stylesheet" href="myAccount.css">
+    <link rel="stylesheet" href="myAccount.css">
     <title>My Account</title>
 
 </head>
@@ -200,6 +202,7 @@ include 'header.php';
                 <input type="file" name="profilePicture" accept="image/*" onchange="previewImage(event)">
 
                 <button type="submit" class="btn-update">Update Profile</button>
+                <button type="submit">Update Profile</button>
             </form>
         </div>
     <?php endif; ?>

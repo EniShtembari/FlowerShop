@@ -1,23 +1,11 @@
-/* Ngjyrat e personalizuara */
-:root {
-    --main-color: #ffd6dc;
-    --main-light: #fdf0f2;
-    --main-dark: #f74b65;
-    --product-bg-color: #f8f8f8;
-    --heading-color: #d81b60;
-    --alert-success-bg: #d4edda;
-    --alert-success-border: #c3e6cb;
-    --alert-danger-bg: #f8d7da;
-    --alert-danger-border: #f5c6cb;
-}
+/* myAccount.css */
 
-/* Stilimi i përgjithshëm */
+/* General styles for the main content */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #fce4ec;
-    background-size: cover;
+    background-color: #f7f3f9; /* Light pink background */
 }
 
 main {
@@ -229,6 +217,103 @@ form {
 
 .user-list tr:hover {
     background-color: #fce4ec;
-}
 
+
+    /* Headings */
+
+    h1, h2 {
+        color: #d5006d; /* Deep pink for headings */
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    /* Alerts */
+
+    .alert {
+        padding: 10px;
+        border-radius: 4px;
+        margin-bottom: 20px;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .alert-success {
+        background-color: #f8d7e0; /* Light pink for success */
+        color: #d5006d; /* Deep pink text */
+        border: 1px solid #f1b3d2;
+    }
+
+    .alert-danger {
+        background-color: #f8d7da; /* Light pink for error */
+        color: #d5006d; /* Deep pink text */
+        border: 1px solid #f1b3d2;
+    }
+
+    /* Table styling */
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        font-size: 16px;
+        text-align: left;
+    }
+
+    thead {
+        background-color: #f06292; /* Soft pink for table header */
+        color: #fff;
+    }
+
+    thead th {
+        padding: 12px;
+        font-weight: bold;
+    }
+
+    tbody tr {
+        border-bottom: 1px solid #f1b3d2; /* Light pink border between rows */
+        transition: background-color 0.2s;
+    }
+
+    tbody tr:hover {
+        background-color: #fce4ec; /* Lighter pink on row hover */
+    }
+
+    td {
+        padding: 12px;
+    }
+
+    /* Button styles */
+
+    .btn {
+        display: inline-block;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 4px;
+        color: #fff;
+        text-decoration: none;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .btn-edit {
+        background-color: #ec407a;
+    }
+
+    .btn-edit:hover {
+        background-color: #d81b60;
+    }
+
+    .btn-delete {
+        background-color: #f50057;
+    }
+
+    .btn-delete:hover {
+        background-color: #c51162;
+    }
+
+    form {
+        display: inline;
+    }
+}
 
