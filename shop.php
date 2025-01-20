@@ -93,9 +93,18 @@ include 'header.php';
                         <div class="content-buttons">
                             <button class="cart-btn">🛒 Add to Cart</button>
                             <?php if (!empty($_SESSION['isAdmin']) && $_SESSION['isAdmin']): ?>
-                                <button class="edit-btn" onclick="openModal(<?php echo $row['ProductID']; ?>, '<?php echo $row['ProductName']; ?>', '<?php echo $row['ImageURL']; ?>', <?php echo $row['DiscountPercentage']; ?>, <?php echo $row['CurrentPrice']; ?>, <?php echo $row['OriginalPrice']; ?>)">
+                                <button class="edit-btn"
+                                        onclick="openModal(
+                                        <?php echo $row['ProductID']; ?>,
+                                                '<?php echo addslashes($row['ProductName']); ?>',
+                                                '<?php echo addslashes($row['ImageURL']); ?>',
+                                        <?php echo $row['DiscountPercentage']; ?>,
+                                        <?php echo $row['CurrentPrice']; ?>,
+                                        <?php echo $row['OriginalPrice']; ?>
+                                                )">
                                     Edit Product
                                 </button>
+
                             <?php endif; ?>
                         </div>
                     </div>
@@ -106,6 +115,30 @@ include 'header.php';
         <?php endif; ?>
     </div>
 </section>
+
+<div class="modal" id="edit-modal">
+    <form action="shop.php" method="post">
+        <h2>Edit Product</h2>
+        <input type="hidden" name="productID" id="edit-productID">
+
+        <label for="edit-productName">Product Name</label>
+        <input type="text" name="productName" id="edit-productName" required>
+
+        <label for="edit-imageURL">Image URL</label>
+        <input type="text" name="imageURL" id="edit-imageURL" required>
+
+        <label for="edit-discountPercentage">Discount Percentage</label>
+        <input type="number" name="discountPercentage" id="edit-discountPercentage" step="0.01" required>
+
+        <label for="edit-currentPrice">Current Price</label>
+        <input type="number" name="currentPrice" id="edit-currentPrice" step="0.01" required>
+
+        <label for="edit-originalPrice">Original Price</label>
+        <input type="number" name="originalPrice" id="edit-originalPrice" step="0.01" required>
+
+        <button type="submit" class="save-btn">💾 Save Changes</button>
+    </form>
+</div>
 
 <script src="edit-product.js"></script>
 <script src="timeout.js"></script>
