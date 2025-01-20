@@ -89,9 +89,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
             if ($attempts && $attempts['blockedUntil'] > date('Y-m-d H:i:s')) {
                 $error_message = "Your account is blocked. Try again after " . $attempts['blockedUntil'];
             } else {
-                // Verify password
+                // verifiko passwordin
                 if (password_verify($password, $user['password'])) {
-                    // Login successful, clear login attempts
+                    //kur login realizohet me sukses, fshi tentativat
                     $stmt = $pdo->prepare("DELETE FROM login_attempts WHERE user_id = :user_id");
                     $stmt->execute([':user_id' => $user['id']]);
 
@@ -101,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
                     $_SESSION['firstName'] = $user['firstName'];
                     $_SESSION['isAdmin'] = ($user['role'] === 'admin');
 
-                    // Handle "Remember Me" functionality
+                    // funksionaliteti remember me
                     if ($remember_me) {
                         $token = bin2hex(random_bytes(32));
                         $expires_at = date('Y-m-d H:i:s', strtotime('+30 days'));
@@ -131,7 +131,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
                     header('Location: myAccount.php');
                     exit();
                 } else {
-                    // Handle failed login attempts
+                    // tentativa te deshtuara te loginit
                     if (!$attempts) {
                         $stmt = $pdo->prepare("INSERT INTO login_attempts (user_id, attempts, lastAttempt) VALUES (:user_id, 1, NOW())");
                         $stmt->execute([':user_id' => $user['id']]);
