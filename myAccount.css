@@ -20,17 +20,47 @@ body {
     background-size: cover;
 }
 
-/* Titulli kryesor */
-h1 {
-    font-size: 2.5rem;
-    color: var(--heading-color);
-    text-align: center;
+main {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
+/* Headings */
+h1, h2 {
+    color: #d5006d; /* Deep pink for headings */
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Alerts */
+.alert {
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.alert-success {
+    background-color: #f8d7e0; /* Light pink for success */
+    color: #d5006d; /* Deep pink text */
+    border: 1px solid #f1b3d2;
+}
+
+.alert-danger {
+    background-color: #f8d7da; /* Light pink for error */
+    color: #d5006d; /* Deep pink text */
+    border: 1px solid #f1b3d2;
+}
+
 
 /* Stilimi i formës */
 form {
     margin: 50px auto;
-    padding: 20px;
     max-width: 600px; /* Zgjeruar gjerësinë */
     background: var(--main-light);
     border: 2px solid var(--main-color);
@@ -51,6 +81,68 @@ form::before {
     z-index: -1;
     filter: blur(10px);
 }
+
+/* Table styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 16px;
+    text-align: left;
+}
+
+thead {
+    background-color: #f06292; /* Soft pink for table header */
+    color: #fff;
+}
+
+thead th {
+    padding: 12px;
+    font-weight: bold;
+}
+
+tbody tr {
+    border-bottom: 1px solid #f1b3d2; /* Light pink border between rows */
+    transition: background-color 0.2s;
+}
+
+tbody tr:hover {
+    background-color: #fce4ec; /* Lighter pink on row hover */
+}
+
+td {
+    padding: 12px;
+}
+
+/* Button styles */
+.btn {
+    display: inline-block;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-edit {
+    background-color: #ec407a;
+}
+
+.btn-edit:hover {
+    background-color: #d81b60;
+}
+
+.btn-delete {
+    background-color: #f50057;
+}
+
+.btn-delete:hover {
+    background-color: #c51162;
+}
+
 
 /* Etiketat dhe fushat */
 form label {
@@ -91,7 +183,7 @@ form input:focus {
     box-shadow: 0 0 8px var(--main-dark);
 }
 
-form button {
+.btn-update {
     background: var(--main-dark);
     color: var(--main-light);
     font-weight: bold;
@@ -103,10 +195,15 @@ form button {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-form button:hover {
+.btn-update:hover {
     background: var(--main-color);
     color: var(--main-dark);
 }
+
+form {
+    display: inline;
+}
+
 
 /* Tabelat */
 .user-list table {
@@ -134,22 +231,4 @@ form button:hover {
     background-color: #fce4ec;
 }
 
-/* Alert mesazhet */
-.alert {
-    padding: 15px;
-    margin-bottom: 20px;
-    border-radius: 4px;
-    font-size: 14px;
-}
 
-.alert-success {
-    background-color: var(--alert-success-bg);
-    border: 1px solid var(--alert-success-border);
-    color: #155724;
-}
-
-.alert-danger {
-    background-color: var(--alert-danger-bg);
-    border: 1px solid var(--alert-danger-border);
-    color:#721c24;
-}

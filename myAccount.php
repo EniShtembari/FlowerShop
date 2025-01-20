@@ -199,7 +199,7 @@ include 'header.php';
                 <label>Profile Picture:</label>
                 <input type="file" name="profilePicture" accept="image/*" onchange="previewImage(event)">
 
-                <button type="submit">Update Profile</button>
+                <button type="submit" class="btn-update">Update Profile</button>
             </form>
         </div>
     <?php endif; ?>

@@ -11,24 +11,32 @@ $pdo = require __DIR__ . '/connect.php';
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["email"])) {
     $email = $_POST["email"];
     $code = rand(100000, 999999); // 6-digit code
-    $expiry = time() + 90; // 90 seconds
+    $expiry = time() + 90; // 1 minute 30 seconds expiration
 
-    // Check if the email exists in the database
-    $sql = "SELECT * FROM users WHERE email = :email";
+    // Check if the email exists in the users table
+    $sql = "SELECT id FROM users WHERE email = :email";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':email', $email);
     $stmt->execute();
 
     if ($stmt->rowCount() > 0) {
-        // Update reset code and expiration
-        $sql = "UPDATE users 
-                SET resetPassword = :resetPassword, resetPasswordExpiration = :resetPasswordExpiration 
-                WHERE email = :email";
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        $user_id = $user['id'];
+
+        // Insert or update the reset password code and expiration in verification_codes
+        $sql = "
+            INSERT INTO verification_codes (id, resetPasswordCode, resetPasswordExpiration, status)
+            VALUES (:id, :resetPasswordCode, :resetPasswordExpiration, 'unverified')
+            ON DUPLICATE KEY UPDATE 
+                resetPasswordCode = :resetPasswordCode,
+                resetPasswordExpiration = :resetPasswordExpiration,
+                status = 'unverified'
+        ";
         $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(':resetPassword', $code);
+        $stmt->bindParam(':id', $user_id);
+        $stmt->bindParam(':resetPasswordCode', $code);
         $resetPasswordExpiration = date("Y-m-d H:i:s", $expiry);
         $stmt->bindParam(':resetPasswordExpiration', $resetPasswordExpiration);
-        $stmt->bindParam(':email', $email);
 
         if ($stmt->execute()) {
             // Send the reset code via email
@@ -40,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["email"])) {
                 $mail->SMTPAuth = true;
                 $mail->Username = 'noreply.bloomflowers@gmail.com';
                 $mail->Password = 'nbtk lstr ogqa bpoo'; // Use App Password here
-                $mail->SMTPSecure ='tsl';
+                $mail->SMTPSecure = 'tls';
                 $mail->Port = 587;
 
                 $mail->SMTPOptions = array(
@@ -72,6 +80,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["email"])) {
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
