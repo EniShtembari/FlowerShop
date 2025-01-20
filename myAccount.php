@@ -4,7 +4,7 @@ session_start();
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: index.php");
     exit();
 }
 
@@ -50,6 +50,46 @@ if ($role === 'admin' && isset($_POST['delete_user'])) {
     }
 }
 
+if ($_SERVER["REQUEST_METHOD"] == "POST" && $role !== 'admin') {
+    $firstName = $_POST['firstName'];
+    $lastName = $_POST['lastName'];
+    $email = $_POST['email'];
+    $password = !empty($_POST['password']) ? password_hash($_POST['password'], PASSWORD_DEFAULT) : null;
+
+    // Process profile picture upload
+    $profilePicture = null;
+    if (!empty($_FILES['profilePicture']['name'])) {
+        $profilePicture = time() . "_" . $_FILES['profilePicture']['name'];
+        move_uploaded_file($_FILES['profilePicture']['tmp_name'], "uploads/" . $profilePicture);
+    }
+
+    // Prepare the query for updating user details
+    $update_query = $conn->prepare(
+        $password
+            ? "UPDATE users SET firstName = ?, lastName = ?, email = ?, password = ?, profilePicture = ? WHERE id = ?"
+            : "UPDATE users SET firstName = ?, lastName = ?, email = ?, profilePicture = ? WHERE id = ?"
+    );
+
+    if ($password) {
+        $update_query->bind_param("sssssi", $firstName, $lastName, $email, $password, $profilePicture, $user_id);
+    } else {
+        $update_query->bind_param("ssssi", $firstName, $lastName, $email, $profilePicture, $user_id);
+    }
+
+    $update_query->execute();
+    $_SESSION['message'] = "Profile updated successfully!";
+    header("Location: myAccount.php");
+    exit();
+}
+
+// Fetch current user details for regular users
+if ($role !== 'admin') {
+    $user_query = $conn->prepare("SELECT * FROM users WHERE id = ?");
+    $user_query->bind_param("i", $user_id);
+    $user_query->execute();
+    $user = $user_query->get_result()->fetch_assoc();
+}
+
 // Now include the header after all session and redirect logic
 include 'header.php';
 ?>
@@ -59,9 +99,8 @@ include 'header.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="myAccount.css">
+    <link rel="stylesheet" href="myAccount.css">
     <title>My Account</title>
-
-
 
 </head>
 <body>
@@ -135,11 +174,46 @@ include 'header.php';
                 </table>
             </div>
         </div>
+    <?php else: ?>
+        <!-- Regular user profile update section -->
+        <div class="profile">
+            <form method="POST" action="myAccount.php" enctype="multipart/form-data">
+                <?php if (!empty($user['profilePicture'])): ?>
+                    <img id="profilePreview" src="uploads/<?= htmlspecialchars($user['profilePicture']) ?>" alt="Profile Picture">
+                <?php else: ?>
+                    <img id="profilePreview" src="images/default_profile_picture.jpg" alt="Default Profile Picture">
+                <?php endif; ?>
+
+                <label>First Name:</label>
+                <input type="text" name="firstName" value="<?= htmlspecialchars($user['firstName']) ?>" required>
+
+                <label>Last Name:</label>
+                <input type="text" name="lastName" value="<?= htmlspecialchars($user['lastName']) ?>" required>
+
+                <label>Email:</label>
+                <input type="email" name="email" value="<?= htmlspecialchars($user['email']) ?>" required>
+
+                <label>Password:</label>
+                <input type="password" name="password" placeholder="Enter new password (optional)">
+
+                <label>Profile Picture:</label>
+                <input type="file" name="profilePicture" accept="image/*" onchange="previewImage(event)">
+
+                <button type="submit">Update Profile</button>
+            </form>
+        </div>
     <?php endif; ?>
-
 </main>
-
-<script src="timeout.js"></script>
+<script>
+    function previewImage(event) {
+        const reader = new FileReader();
+        reader.onload = function() {
+            const preview = document.getElementById('profilePreview');
+            preview.src = reader.result;
+        }
+        reader.readAsDataURL(event.target.files[0]);
+    }
+</script>
 
 </body>
 </html>
