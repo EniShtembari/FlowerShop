@@ -213,6 +213,32 @@ body::before {
     transform: translate(-50%, -50%);
 }
 
+.input-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.error-message {
+    color: #ff3333;
+    font-size: 12px;
+    margin-top: 5px;
+    position: absolute;
+    bottom: -20px;
+    left: 0;
+}
+
+.error {
+    border-color: #ff3333 !important;
+}
+
+.error-main {
+    background-color: #ffe6e6;
+    color: #ff3333;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    text-align: center;
+}
 
 /* Responsive Design */
 @media (max-width: 480px) {

@@ -723,11 +723,11 @@
         <div class="footer-link-box">
             <strong>Main Link's</strong>
             <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Shop</a></li>
+                <li><a href="homepage.php">Home</a></li>
+                <li><a href="aboutus.php">About</a></li>
+                <li><a href="shop.php">Shop</a></li>
                 <li><a href="#">Popular</a></li>
-                <li><a href="#">Order</a></li>
+                <li><a href="cart.php">Order</a></li>
                 <li><a href="#">Contact</a></li>
             </ul>
         </div>

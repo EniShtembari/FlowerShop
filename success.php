@@ -45,35 +45,37 @@ try {
         $conn->begin_transaction();
 
         try {
-            // Insert into orders
-            $sql = "INSERT INTO orders (user_id, total_amount, payment_intent_id) 
-                   VALUES (?, ?, ?)";
-            $stmt = $conn->prepare($sql);
-            $total_amount = $payment_intent->amount / 100; // Convert from cents
-            $stmt->bind_param("ids", $user_id, $total_amount, $payment_intent_id);
-            $stmt->execute();
-            $order_id = $conn->insert_id;
-
-            // Get cart items
+            // Fetch cart items
             $sql = "SELECT c.ProductID, c.Quantity, p.CurrentPrice 
-                   FROM cart c 
-                   JOIN products p ON c.ProductID = p.ProductID 
-                   WHERE c.UserID = ?";
+                    FROM cart c 
+                    JOIN products p ON c.ProductID = p.ProductID 
+                    WHERE c.UserID = ?";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("i", $user_id);
             $stmt->execute();
             $result = $stmt->get_result();
 
-            // Insert order items
-            $sql = "INSERT INTO order_items (order_id, product_id, quantity, price) 
-                   VALUES (?, ?, ?, ?)";
-            $stmt = $conn->prepare($sql);
+            // Prepare products data as JSON
+            $products = [];
+            $total_amount = 0;
 
             while ($item = $result->fetch_assoc()) {
-                $stmt->bind_param("iiid", $order_id, $item['ProductID'],
-                    $item['Quantity'], $item['CurrentPrice']);
-                $stmt->execute();
+                $products[] = [
+                    'product_id' => $item['ProductID'],
+                    'quantity' => $item['Quantity'],
+                    'price' => $item['CurrentPrice']
+                ];
+                $total_amount += $item['Quantity'] * $item['CurrentPrice'];
             }
+
+            $products_json = json_encode($products);
+
+            // Insert into orders table
+            $sql = "INSERT INTO orders (user_id, total_amount, payment_intent_id, products) 
+                    VALUES (?, ?, ?, ?)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("idss", $user_id, $total_amount, $payment_intent_id, $products_json);
+            $stmt->execute();
 
             // Clear cart
             $sql = "DELETE FROM cart WHERE UserID = ?";
@@ -83,7 +85,6 @@ try {
 
             // Commit transaction
             $conn->commit();
-
         } catch (Exception $e) {
             $conn->rollback();
             throw $e;

@@ -114,14 +114,17 @@ try {
     $error_message = 'An unexpected error occurred. Please try again later.';
 }
 ?>
+<?php
 
+include 'header.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shopping Cart</title>
-    <link rel="stylesheet" href="cart.css">
+    <link rel="stylesheet" href="http://localhost/flowershop/cart.css">
     <script src="https://js.stripe.com/v3/"></script>
 </head>
 <body>
@@ -159,10 +162,12 @@ try {
                     <td>
                         <form action="updateCart.php" method="POST" style="display: inline;">
                             <input type="hidden" name="cartID" value="<?php echo $row['CartID']; ?>">
-                            <button type="submit" name="action" value="decrease">-</button>
-                            <input type="text" class="quantity-input" name="quantity"
-                                   value="<?php echo $row['Quantity']; ?>" readonly>
-                            <button type="submit" name="action" value="increase">+</button>
+                                <div class="quantity-container">
+                                    <button type="submit" name="action" value="decrease">-</button>
+                                    <input type="text" class="quantity-input" name="quantity"
+                                           value="<?php echo $row['Quantity']; ?>" readonly>
+                                    <button type="submit" name="action" value="increase">+</button>
+                                </div>
                         </form>
                     </td>
                     <td>$<?php echo number_format($row['CurrentPrice'], 2); ?></td>
@@ -206,5 +211,9 @@ try {
         </div>
     <?php endif; ?>
 </div>
+<?php
+
+include 'footer.php';
+?>
 </body>
 </html>

@@ -54,7 +54,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ProductID']) && !empt
     exit;
 } else {
     // Invalid request handling
-    echo "Invalid request. Please try again.";
+    $_SESSION['cart_message']="Invalid request. Please try again.";
+    header("Location: shop.php");
     exit;
 }
 ?>

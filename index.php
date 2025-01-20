@@ -52,7 +52,7 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_me'])) {
                 'samesite' => 'Strict'
             ]);
 
-            header('Location: homepage.php');
+            header('Location: myAccount.php');
             exit();
         }
     }
@@ -126,7 +126,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
                         ]);
                     }
 
-                    header('Location: homepage.php');
+                    header('Location: myAccount.php');
                     exit();
                 } else {
                     // Handle failed login attempts
