@@ -1,9 +1,3 @@
-// Smooth Scroll for "Learn More" Button
-document.querySelector('.btn').addEventListener('click', function(event) {
-    event.preventDefault();
-    document.querySelector('#about').scrollIntoView({ behavior: 'smooth' });
-});
-
 //  Animation for Icon Section
 const icons = document.querySelectorAll('.icons');
 icons.forEach(icon => {

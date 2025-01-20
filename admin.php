@@ -4,14 +4,13 @@
 include 'header.php';
 ?>
 <?php
-// Database connection
+
 $conn = new mysqli('localhost', 'root', '', 'flowershop');
 
 if ($conn->connect_error) {
     die('Connection failed: ' . $conn->connect_error);
 }
 
-// Handle form submission to add a product
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $productName = $_POST['product_name'];
     $imageURL = $_POST['image_url'];
@@ -19,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $currentPrice = $_POST['current_price'];
     $originalPrice = $_POST['original_price'];
 
-    // Validate inputs
+
     if (!empty($productName) && !empty($imageURL) && is_numeric($discountPercentage) &&
         is_numeric($currentPrice) && is_numeric($originalPrice)) {
 
@@ -99,7 +98,7 @@ $conn->close();
     </form>
 </div>
 
-<!-- JavaScript for Popup and Redirection -->
+
 <?php if (isset($redirect) && $redirect) { ?>
     <script type="text/javascript">
         alert("Product added successfully!");
@@ -108,7 +107,7 @@ $conn->close();
 <?php }
 ?>
 <?php
-// Include the footer file
+
 include 'footer.php';
 ?>
 <script src="timeout.js"></script>
