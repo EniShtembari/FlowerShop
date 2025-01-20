@@ -6,6 +6,11 @@
       <sourceFolder url="file://$MODULE_DIR$/PHPMailer/src" isTestSource="false" packagePrefix="PHPMailer\PHPMailer\" />
       <sourceFolder url="file://$MODULE_DIR$/PHPMailer/test" isTestSource="true" packagePrefix="PHPMailer\Test\" />
       <sourceFolder url="file://$MODULE_DIR$/stripe/stripe-php/lib" isTestSource="false" packagePrefix="Stripe" />
+      <sourceFolder url="file://$MODULE_DIR$/phpmailer/phpmailer/src" isTestSource="false" packagePrefix="PHPMailer\PHPMailer\" />
+      <sourceFolder url="file://$MODULE_DIR$/phpmailer/phpmailer/test" isTestSource="true" packagePrefix="PHPMailer\Test\" />
+      <sourceFolder url="file://$MODULE_DIR$/stripe-php/lib" isTestSource="false" packagePrefix="Stripe\" />
+      <sourceFolder url="file://$MODULE_DIR$/stripe-php/tests" isTestSource="true" packagePrefix="Stripe\" />
+      <sourceFolder url="file://$MODULE_DIR$/stripe-php/tests/Stripe" isTestSource="true" packagePrefix="Stripe\" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
