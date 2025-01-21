@@ -726,7 +726,6 @@
                 <li><a href="homepage.php">Home</a></li>
                 <li><a href="aboutus.php">About</a></li>
                 <li><a href="shop.php">Shop</a></li>
-                <li><a href="#">Popular</a></li>
                 <li><a href="cart.php">Order</a></li>
                 <li><a href="#">Contact</a></li>
             </ul>
@@ -739,3 +738,4 @@
         <span>&copy; Copyright 2025 - Web Development</span>
     </div>
 </footer>
+<script src="js/homepage.js"></script>
