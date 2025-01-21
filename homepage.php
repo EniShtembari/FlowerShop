@@ -73,7 +73,7 @@ if (!isset($_SESSION['user_id'])) {
                 <li><a href="#">Home</a></li>
                 <li><a href="aboutus.php">About</a></li>
                 <li><a href="shop.php">Shop</a></li>
-                <li><a href="#">Order</a></li>
+                <li><a href="cart.php">Order</a></li>
                 <li><a href="#" id="contactBtn">Contact</a>
             </ul>
         </nav>
@@ -162,8 +162,6 @@ if (!isset($_SESSION['user_id'])) {
         <!--text-->
         <strong>Hydrangea</strong>
     </a>
-
-
 </section>
 
 <!-- =================Popular================== -->
@@ -295,7 +293,7 @@ if (!isset($_SESSION['user_id'])) {
             <!--text-->
             <div class="popular-banner-text">
                 <h3>Summer Flower Collection</h3>
-                <a href="#">Shop Now</a>
+                <a href="shop.php">Shop Now</a>
             </div>
             <!--img-->
             <div class="popular-banner-img">
@@ -305,8 +303,6 @@ if (!isset($_SESSION['user_id'])) {
         </div>
     </div>
 </section>
-
-
 
 <!-- ===========shopping-banner=======================-->
 <section id="shopping-banner">
@@ -393,18 +389,6 @@ if (!isset($_SESSION['user_id'])) {
                 <li><a href="#">Contact</a></li>
             </ul>
         </div>
-
-        <!-- ===========link======================-->
-
-        <!-- ===========subscribe======================-->
-        <!--  <div class="footer subscribe">
-              <strong>Subscribe Now</strong>
-              <p> Stay updated on our latest floral creations</p>
-              <div class="subscribe-box">
-                  <input type="email" placeholder="Example@gmail.com" name="subscribe" required/>
-                  <button>Subscribe</button>
-              </div>
-       </div>&#45;&#45;-->
     </div>
     <!-- ===========bottom======================-->
     <div class="footer-bottom">
