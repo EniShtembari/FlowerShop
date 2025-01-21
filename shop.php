@@ -1,6 +1,11 @@
-
 <?php
 session_start();
+
+// Check if user is logged in
+if (!isset($_SESSION['user_id'])) {
+    header("Location: index.php");
+    exit;
+}
 
 $servername = "localhost";
 $username = "root";
@@ -14,30 +19,77 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Handle delete product request
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'delete') {
-    $productID = $_POST['productID'];
-    if (!empty($productID)) {
-        $sql = "DELETE FROM products WHERE ProductID = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("i", $productID);
+$message = '';
 
-        if ($stmt->execute()) {
-            $message = "Product deleted successfully.";
-        } else {
-            $message = "Error deleting product: " . $conn->error;
+// Handle POST requests
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Handle delete product request
+    if (isset($_POST['action']) && $_POST['action'] === 'delete') {
+        $productID = $_POST['productID'];
+
+        if (!empty($productID)) {
+            $sql = "DELETE FROM products WHERE ProductID = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("i", $productID);
+
+            if ($stmt->execute()) {
+                $message = "Product deleted successfully.";
+            } else {
+                $message = "Error deleting product: " . $conn->error;
+            }
+            $stmt->close();
         }
+    }
+    // Handle update product request
+    else {
+        $productID = $_POST['productID'];
+        $productName = $_POST['productName'];
+        $imageURL = $_POST['imageURL'];
+        $discountPercentage = $_POST['discountPercentage'];
+        $currentPrice = $_POST['currentPrice'];
+        $originalPrice = $_POST['originalPrice'];
 
-        $stmt->close();
+        // Validate inputs
+        if (!empty($productID) && !empty($productName) && !empty($imageURL)) {
+            $sql = "UPDATE products SET 
+                    ProductName = ?, 
+                    ImageURL = ?, 
+                    DiscountPercentage = ?, 
+                    CurrentPrice = ?, 
+                    OriginalPrice = ? 
+                    WHERE ProductID = ?";
+
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("ssdddi",
+                $productName,
+                $imageURL,
+                $discountPercentage,
+                $currentPrice,
+                $originalPrice,
+                $productID
+            );
+
+            if ($stmt->execute()) {
+                $message = "Product updated successfully.";
+            } else {
+                $message = "Error updating product: " . $conn->error;
+            }
+            $stmt->close();
+        } else {
+            $message = "Please fill in all required fields.";
+        }
     }
 }
 
 // Retrieve all products from the database
 $sql = "SELECT * FROM products";
 $result = $conn->query($sql);
+
+
 ?>
 
 <?php
+// Include the footer file
 
 include 'header.php';
 ?>
@@ -57,6 +109,15 @@ include 'header.php';
     <div class="content">
         <h1>Our Shop</h1>
         <?php if (!empty($message)) echo "<p>$message</p>"; ?>
+        <!-- Display success/error message -->
+        <?php if (!empty($_SESSION['cart_message'])): ?>
+            <div class="cart-message">
+                <p><?php echo htmlspecialchars($_SESSION['cart_message']); ?></p>
+            </div>
+            <?php unset($_SESSION['cart_message']); // Clear the message ?>
+        <?php endif; ?>
+
+        <?php if (!empty($message)) echo "<p>$message</p>"; ?>
 
         <?php if (!empty($_SESSION['isAdmin']) && $_SESSION['isAdmin']): ?>
             <form action="admin.php" method="get">
@@ -65,6 +126,7 @@ include 'header.php';
         <?php endif; ?>
     </div>
 </div>
+
 
 <section class="product" id="product">
     <div class="box-container">
@@ -90,21 +152,15 @@ include 'header.php';
                         <div class="price">
                             $<?php echo $row['CurrentPrice']; ?> <span>$<?php echo $row['OriginalPrice']; ?></span>
                         </div>
+                        <form action="addToCart.php" method="POST">
+                            <input type="hidden" name="ProductID" value="<?php echo $row['ProductID']; ?>">
+                            <button type="submit" class="cart-btn">🛒 Add to Cart</button>
+                        </form>
                         <div class="content-buttons">
-                            <button class="cart-btn">🛒 Add to Cart</button>
                             <?php if (!empty($_SESSION['isAdmin']) && $_SESSION['isAdmin']): ?>
-                                <button class="edit-btn"
-                                        onclick="openModal(
-                                        <?php echo $row['ProductID']; ?>,
-                                                '<?php echo addslashes($row['ProductName']); ?>',
-                                                '<?php echo addslashes($row['ImageURL']); ?>',
-                                        <?php echo $row['DiscountPercentage']; ?>,
-                                        <?php echo $row['CurrentPrice']; ?>,
-                                        <?php echo $row['OriginalPrice']; ?>
-                                                )">
+                                <button class="edit-btn" onclick="openModal(<?php echo $row['ProductID']; ?>, '<?php echo $row['ProductName']; ?>', '<?php echo $row['ImageURL']; ?>', <?php echo $row['DiscountPercentage']; ?>, <?php echo $row['CurrentPrice']; ?>, <?php echo $row['OriginalPrice']; ?>)">
                                     Edit Product
                                 </button>
-
                             <?php endif; ?>
                         </div>
                     </div>
@@ -139,7 +195,6 @@ include 'header.php';
         <button type="submit" class="save-btn">💾 Save Changes</button>
     </form>
 </div>
-
 <script src="edit-product.js"></script>
 <script src="timeout.js"></script>
 <?php

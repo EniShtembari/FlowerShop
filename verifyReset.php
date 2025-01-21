@@ -5,14 +5,33 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["email"], $_POST["code
     $email = $_POST["email"];
     $code = $_POST["code"];
 
-    // Check if the reset code is valid and not expired
-    $sql = "SELECT resetPassword, resetPasswordExpiration FROM users WHERE email = :email";
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':email', $email);
-    $stmt->execute();
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    // Get user ID first
+    $userSql = "SELECT id FROM users WHERE email = :email";
+    $userStmt = $pdo->prepare($userSql);
+    $userStmt->bindParam(':email', $email);
+    $userStmt->execute();
+    $userId = $userStmt->fetchColumn();
 
-    if ($user && $user['resetPassword'] == $code && time() < strtotime($user['resetPasswordExpiration'])) {
+    // Modified query to get the most recent reset code
+    $codeSql = "
+        SELECT * 
+        FROM verification_codes 
+        WHERE id = :userId 
+        AND resetPasswordCode IS NOT NULL 
+        ORDER BY resetPasswordExpiration DESC 
+        LIMIT 1
+    ";
+
+    $codeStmt = $pdo->prepare($codeSql);
+    $codeStmt->bindParam(':userId', $userId);
+    $codeStmt->execute();
+    $codeResult = $codeStmt->fetch(PDO::FETCH_ASSOC);
+
+    if (
+        $codeResult &&
+        $codeResult['resetPasswordCode'] === $code &&
+        strtotime($codeResult['resetPasswordExpiration']) > time()
+    ) {
         header('Location: resetPassword.php?email=' . urlencode($email));
         exit();
     } else {
@@ -20,6 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["email"], $_POST["code
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -36,11 +56,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["email"], $_POST["code
     <?php endif; ?>
     <form method="POST">
         <div class="input-group">
-        <input type="hidden" name="email" value="<?php echo htmlspecialchars($_GET['email'] ?? ''); ?>">
-        <input type="text" name="code" placeholder="Enter reset code" required>
+            <input type="hidden" name="email" value="<?php echo htmlspecialchars($_GET['email'] ?? ''); ?>">
+            <input type="text" name="code" placeholder="Enter reset code" required>
         </div>
         <button type="submit" class="btn">Verify Code</button>
-
     </form>
 </div>
 </body>
