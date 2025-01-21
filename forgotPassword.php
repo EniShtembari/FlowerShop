@@ -10,10 +10,10 @@ $pdo = require __DIR__ . '/connect.php';
 
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["email"])) {
     $email = $_POST["email"];
-    $code = rand(100000, 999999); // 6-digit code
-    $expiry = time() + 90; // 1 minute 30 seconds expiration
+    $code = rand(100000, 999999); // kodi i rigjeneruar 6 shifror
+    $expiry = time() + 90; // 1 minute 30 seconda
 
-    // Check if the email exists in the users table
+    // kontrollo nese emaili eshte ne tabelen users
     $sql = "SELECT id FROM users WHERE email = :email";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':email', $email);
@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["email"])) {
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
         $user_id = $user['id'];
 
-        // Insert or update the reset password code and expiration in verification_codes
+        // update resetPasswordCode dhe resetPasswordExpiration
         $sql = "
             INSERT INTO verification_codes (id, resetPasswordCode, resetPasswordExpiration, status)
             VALUES (:id, :resetPasswordCode, :resetPasswordExpiration, 'unverified')

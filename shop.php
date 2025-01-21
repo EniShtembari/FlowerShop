@@ -116,7 +116,7 @@ include 'header.php';
             </div>
             <?php unset($_SESSION['cart_message']); // Clear the message ?>
         <?php endif; ?>
-        
+
 
         <?php if (!empty($_SESSION['isAdmin']) && $_SESSION['isAdmin']): ?>
             <form action="admin.php" method="get">

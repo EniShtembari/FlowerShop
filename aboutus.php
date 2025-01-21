@@ -82,11 +82,7 @@ include 'header.php';
             <span class="discount"> -10% </span>
             <div class="image">
                 <img src="composition/eee4c8399b08391f5beeb9b50b8b327a.jpg" alt="flower">
-                <div class="icons">
 
-                    <a href="#" class="cart-btn">Add to cart</a>
-
-                </div>
             </div>
             <div class="content">
                 <h3>Flower Pot</h3>
@@ -100,11 +96,6 @@ include 'header.php';
             <span class="discount"> -15% </span>
             <div class="image">
                 <img src="composition/2e3bdd6d45427a7cde0df12d13cb8b01.jpg" alt="flower">
-                <div class="icons">
-
-                    <a href="#" class="cart-btn">Add to cart</a>
-
-                </div>
             </div>
             <div class="content">
                 <h3>Flower Pot</h3>
@@ -117,11 +108,6 @@ include 'header.php';
             <span class="discount"> -20% </span>
             <div class="image">
                 <img src="composition/ca3e5ae2450f0bc3ecb9bc209c8d87b6.jpg" alt="flower">
-                <div class="icons">
-
-                    <a href="#" class="cart-btn">Add to cart</a>
-
-                </div>
             </div>
             <div class="content">
                 <h3>Flower Pot</h3>
@@ -134,11 +120,6 @@ include 'header.php';
             <span class="discount"> -25% </span>
             <div class="image">
                 <img src="composition/c65826240e6dc5242eca1926cee31f69.jpg" alt="flower">
-                <div class="icons">
-
-                    <a href="#" class="cart-btn">Add to cart</a>
-
-                </div>
             </div>
             <div class="content">
                 <h3>Flower Pot</h3>

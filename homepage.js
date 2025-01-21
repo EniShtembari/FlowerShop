@@ -38,5 +38,3 @@ contactBtn.addEventListener('click', () => {
         notification.style.display = 'none';
     }, 10000);
 });
-
-
