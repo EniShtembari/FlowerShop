@@ -2,7 +2,6 @@
 
 session_start();
 
-// Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
     header("Location: index.php");
     exit();
@@ -29,11 +28,9 @@ $result = $stmt->get_result();
 $user = $result->fetch_assoc();
 $role = $user['role'];
 
-// Handle user deletion if admin
 if ($role === 'admin' && isset($_POST['delete_user'])) {
     $delete_id = $_POST['user_id'];
 
-    // Prevent admin from deleting themselves
     if ($delete_id != $user_id) {
         $delete_query = "DELETE FROM users WHERE id = ? AND role != 'admin'";
         $delete_stmt = $conn->prepare($delete_query);
@@ -63,7 +60,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $role !== 'admin') {
         move_uploaded_file($_FILES['profilePicture']['tmp_name'], "uploads/" . $profilePicture);
     }
 
-    // Prepare the query for updating user details
     $update_query = $conn->prepare(
         $password
             ? "UPDATE users SET firstName = ?, lastName = ?, email = ?, password = ?, profilePicture = ? WHERE id = ?"
@@ -82,7 +78,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $role !== 'admin') {
     exit();
 }
 
-// Fetch current user details for regular users
 if ($role !== 'admin') {
     $user_query = $conn->prepare("SELECT * FROM users WHERE id = ?");
     $user_query->bind_param("i", $user_id);
@@ -90,7 +85,6 @@ if ($role !== 'admin') {
     $user = $user_query->get_result()->fetch_assoc();
 }
 
-// Now include the header after all session and redirect logic
 include 'header.php';
 ?>
 <!DOCTYPE html>
@@ -175,7 +169,6 @@ include 'header.php';
             </div>
         </div>
     <?php else: ?>
-        <!-- Regular user profile update section -->
         <div class="profile">
             <form method="POST" action="myAccount.php" enctype="multipart/form-data">
                 <?php if (!empty($user['profilePicture'])): ?>

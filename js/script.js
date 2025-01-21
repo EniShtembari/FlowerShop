@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const email = document.querySelector('input[name="email"]');
     const password = document.querySelector('input[name="password"]');
     const confirmPassword = document.querySelector('input[name="confirmPassword"]');
-    const eyeIcons = document.querySelectorAll('.fa-eye');
 
     // Function to show error message
     function showError(input, message) {
