@@ -116,8 +116,7 @@ include 'header.php';
             </div>
             <?php unset($_SESSION['cart_message']); // Clear the message ?>
         <?php endif; ?>
-
-        <?php if (!empty($message)) echo "<p>$message</p>"; ?>
+        
 
         <?php if (!empty($_SESSION['isAdmin']) && $_SESSION['isAdmin']): ?>
             <form action="admin.php" method="get">
@@ -195,7 +194,6 @@ include 'header.php';
         <button type="submit" class="save-btn">💾 Save Changes</button>
     </form>
 </div>
-<script src="edit-product.js"></script>
 <script src="timeout.js"></script>
 <?php
 // Include the footer file
