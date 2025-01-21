@@ -621,5 +621,19 @@
         </ul>
     </nav>
 </header>
+
 <script src="homepage.js"></script>
+
+<!-- ======== contact notification ============= -->
+<div class="contact-notification-box" id="notification">
+    <h2>Contact Information</h2>
+    <p><strong>Email:  </strong> noreply.bloomflowers@gmail.com </p>
+    <p><strong>Phone:  </strong> +355 592 622 885 122</p>
+    <p><strong>Business Hours: </strong> 24h/7 </p>
+    <p><strong>Address:  </strong>Tirane, Albania; Teodor Keko Str</p>
+</div>
+
+<!-- ===========script=======================-->
+<script src="homepage.js"></script>
+<script src="timeout.js"></script>
 

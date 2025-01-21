@@ -47,7 +47,7 @@ ul {
     padding: 15px 0px;
     display: flex;
     align-items: center;
-    justify-content: space-between; /* Default */
+    justify-content: space-between;
     position: relative;
 }
 
@@ -697,7 +697,8 @@ footer {
     color: #252525;
     font-size: 0.9rem;
 }
-/* Making homepage responsive */
+ /* Making homepage responsive */
+
 /*.menu-btn , .menu-icon {*/
 /*    display: none;*/
 /*}*/
