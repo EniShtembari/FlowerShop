@@ -63,7 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $role !== 'admin') {
         move_uploaded_file($_FILES['profilePicture']['tmp_name'], "uploads/" . $profilePicture);
     }
 
-
+    // Prepare the query for updating user details
     $update_query = $conn->prepare(
         $password
             ? "UPDATE users SET firstName = ?, lastName = ?, email = ?, password = ?, profilePicture = ? WHERE id = ?"
@@ -82,7 +82,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $role !== 'admin') {
     exit();
 }
 
-
+// Fetch current user details for regular users
 if ($role !== 'admin') {
     $user_query = $conn->prepare("SELECT * FROM users WHERE id = ?");
     $user_query->bind_param("i", $user_id);
@@ -90,7 +90,7 @@ if ($role !== 'admin') {
     $user = $user_query->get_result()->fetch_assoc();
 }
 
-
+// Now include the header after all session and redirect logic
 include 'header.php';
 ?>
 <!DOCTYPE html>
@@ -99,8 +99,6 @@ include 'header.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="http://localhost/flowershop/myAccount.css">
-    <link rel="stylesheet" href="css/myAccount.css">
     <link rel="stylesheet" href="css/myAccount.css">
     <title>My Account</title>
 
@@ -190,7 +188,7 @@ include 'header.php';
                 <input type="text" name="firstName" value="<?= htmlspecialchars($user['firstName']) ?>" required>
 
                 <label>Last Name:</label>
-                <input type="text" name="lastName" value="<?= htmlspecialchars($user['LastName']) ?>" required>
+                <input type="text" name="lastName" value="<?= htmlspecialchars($user['lastName']) ?>" required>
 
                 <label>Email:</label>
                 <input type="email" name="email" value="<?= htmlspecialchars($user['email']) ?>" required>
@@ -216,6 +214,8 @@ include 'header.php';
         reader.readAsDataURL(event.target.files[0]);
     }
 </script>
-
+<?php
+include 'footer.php';
+?>
 </body>
 </html>

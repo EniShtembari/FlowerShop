@@ -1,16 +1,16 @@
 <?php
 session_start();
 
-// Clear the session
+// boshatis sessionin
 session_unset();
 session_destroy();
 
-// Remove the "remember_me" cookie
+// hiq cookie
 if (isset($_COOKIE['remember_me'])) {
     setcookie('remember_me', '', time() - 3600, '/', null, false, true);
 }
 
-// Remove the token from the database
+// remove the token from the database
 if (isset($_SESSION['user_id'])) {
     $pdo = require __DIR__ . '/connect.php';
     $stmt = $pdo->prepare("UPDATE users SET rememberMe = NULL WHERE id = :id");

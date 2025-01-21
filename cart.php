@@ -124,7 +124,7 @@ include 'header.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shopping Cart</title>
-    <link rel="stylesheet" href="http://localhost/flowershop/cart.css">
+    <link rel="stylesheet" href="css/cart.css">
     <script src="https://js.stripe.com/v3/"></script>
 </head>
 <body>

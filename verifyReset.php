@@ -5,37 +5,38 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["email"], $_POST["code
     $email = $_POST["email"];
     $code = $_POST["code"];
 
-    // Get user ID first
+    // merr id e userit
     $userSql = "SELECT id FROM users WHERE email = :email";
     $userStmt = $pdo->prepare($userSql);
     $userStmt->bindParam(':email', $email);
     $userStmt->execute();
     $userId = $userStmt->fetchColumn();
 
-    // Modified query to get the most recent reset code
-    $codeSql = "
-        SELECT * 
-        FROM verification_codes 
-        WHERE id = :userId 
-        AND resetPasswordCode IS NOT NULL 
-        ORDER BY resetPasswordExpiration DESC 
-        LIMIT 1
-    ";
+    if ($userId) {
+        // kontrollo reset pass aktual
+        $verifySql = "
+            UPDATE verification_codes 
+            SET status = 'verified'
+            WHERE id = :userId 
+            AND resetPasswordCode = :code
+            AND resetPasswordExpiration > NOW()
+            AND status = 'unverified'
+        ";
 
-    $codeStmt = $pdo->prepare($codeSql);
-    $codeStmt->bindParam(':userId', $userId);
-    $codeStmt->execute();
-    $codeResult = $codeStmt->fetch(PDO::FETCH_ASSOC);
+        $verifyStmt = $pdo->prepare($verifySql);
+        $verifyStmt->bindParam(':userId', $userId);
+        $verifyStmt->bindParam(':code', $code);
 
-    if (
-        $codeResult &&
-        $codeResult['resetPasswordCode'] === $code &&
-        strtotime($codeResult['resetPasswordExpiration']) > time()
-    ) {
-        header('Location: resetPassword.php?email=' . urlencode($email));
-        exit();
+        if ($verifyStmt->execute() && $verifyStmt->rowCount() > 0) {
+            header('Location: resetPassword.php?email=' . urlencode($email));
+            exit();
+        } else {
+            $message = "Invalid or expired reset code.";
+            $messageClass = "error";
+        }
     } else {
-        $message = "Invalid or expired reset code.";
+        $message = "User not found.";
+        $messageClass = "error";
     }
 }
 ?>
@@ -51,8 +52,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["email"], $_POST["code
 <body>
 <div class="container">
     <h1 class="form-title">Verify Reset Code</h1>
-    <?php if (!empty($message)) : ?>
-        <div class="error"><?php echo htmlspecialchars($message); ?></div>
+    <?php if (!empty($errors)) : ?>
+        <?php foreach ($errors as $error) : ?>
+            <div class="error"><?php echo htmlspecialchars($error); ?></div>
+        <?php endforeach; ?>
     <?php endif; ?>
     <form method="POST">
         <div class="input-group">
