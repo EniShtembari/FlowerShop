@@ -1,5 +1,7 @@
 <?php
 session_start();
+
+// Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
     header("Location: index.php");
     exit;
@@ -12,13 +14,16 @@ $dbname = "flowershop";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
+// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
 $message = '';
 
+// Handle POST requests
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Handle delete product request
     if (isset($_POST['action']) && $_POST['action'] === 'delete') {
         $productID = $_POST['productID'];
 
@@ -35,6 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->close();
         }
     }
+    // Handle update product request
     else {
         $productID = $_POST['productID'];
         $productName = $_POST['productName'];
@@ -75,6 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+// Retrieve all products from the database
 $sql = "SELECT * FROM products";
 $result = $conn->query($sql);
 
@@ -82,6 +89,8 @@ $result = $conn->query($sql);
 ?>
 
 <?php
+// Include the footer file
+
 include 'header.php';
 ?>
 <!DOCTYPE html>
@@ -100,13 +109,14 @@ include 'header.php';
     <div class="content">
         <h1>Our Shop</h1>
         <?php if (!empty($message)) echo "<p>$message</p>"; ?>
-
+        <!-- Display success/error message -->
         <?php if (!empty($_SESSION['cart_message'])): ?>
             <div class="cart-message">
                 <p><?php echo htmlspecialchars($_SESSION['cart_message']); ?></p>
             </div>
             <?php unset($_SESSION['cart_message']); // Clear the message ?>
         <?php endif; ?>
+
 
 
         <?php if (!empty($_SESSION['isAdmin']) && $_SESSION['isAdmin']): ?>
@@ -185,8 +195,37 @@ include 'header.php';
         <button type="submit" class="save-btn">💾 Save Changes</button>
     </form>
 </div>
+
+<script>
+    function openModal(productID, productName, imageURL, discountPercentage, currentPrice, originalPrice) {
+        const modal = document.getElementById('edit-modal');
+        document.getElementById('edit-productID').value = productID;
+        document.getElementById('edit-productName').value = productName;
+        document.getElementById('edit-imageURL').value = imageURL;
+        document.getElementById('edit-discountPercentage').value = discountPercentage;
+        document.getElementById('edit-currentPrice').value = currentPrice;
+        document.getElementById('edit-originalPrice').value = originalPrice;
+        modal.style.display = 'block';
+    }
+
+    window.onclick = function(event) {
+        const modal = document.getElementById('edit-modal');
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    }
+
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            const modal = document.getElementById('edit-modal');
+            modal.style.display = 'none';
+        }
+    });
+</script>
+<script src="js/timeout.js"></script>
 <script src="js/timeout.js"></script>
 <?php
+// Include the footer file
 include 'footer.php';
 ?>
 </body>
