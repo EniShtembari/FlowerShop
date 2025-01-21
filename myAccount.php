@@ -54,8 +54,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $role !== 'admin') {
     $firstName = $_POST['firstName'];
     $lastName = $_POST['lastName'];
     $email = $_POST['email'];
-    $profilePicture=$_POST['profilePicture'];
-
     $password = !empty($_POST['password']) ? password_hash($_POST['password'], PASSWORD_DEFAULT) : null;
 
     // Process profile picture upload
@@ -100,6 +98,9 @@ include 'header.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--<link rel="stylesheet" href="myAccount.css">-->
+    <link rel="stylesheet" href="http://localhost/flowershop/myAccount.css">
+    <link rel="stylesheet" href="myAccount.css">
     <link rel="stylesheet" href="myAccount.css">
     <title>My Account</title>
 
@@ -176,33 +177,34 @@ include 'header.php';
             </div>
         </div>
     <?php else: ?>
-    <!-- Regular user profile update section -->
-    <div class="profile">
-        <form method="POST" action="myAccount.php" enctype="multipart/form-data">
-            <?php if (!empty($user['profilePicture'])): ?>
-                <img id="profilePreview" src="uploads/<?= htmlspecialchars($user['profilePicture']) ?>" alt="Profile Picture">
-            <?php else: ?>
-                <img id="profilePreview" src="images/default_profile_picture.jpg" alt="Default Profile Picture">
-            <?php endif; ?>
+        <!-- Regular user profile update section -->
+        <div class="profile">
+            <form method="POST" action="myAccount.php" enctype="multipart/form-data">
+                <?php if (!empty($user['profilePicture'])): ?>
+                    <img id="profilePreview" src="uploads/<?= htmlspecialchars($user['profilePicture']) ?>" alt="Profile Picture">
+                <?php else: ?>
+                    <img id="profilePreview" src="images/default_profile_picture.jpg" alt="Default Profile Picture">
+                <?php endif; ?>
 
-            <label>First Name:</label>
-            <input type="text" name="firstName" value="<?= htmlspecialchars($user['firstName']) ?>" required>
+                <label>First Name:</label>
+                <input type="text" name="firstName" value="<?= htmlspecialchars($user['firstName']) ?>" required>
 
-            <label>Last Name:</label>
-            <input type="text" name="lastName" value="<?= htmlspecialchars($user['LastName']) ?>" required>
+                <label>Last Name:</label>
+                <input type="text" name="lastName" value="<?= htmlspecialchars($user['lastName']) ?>" required>
 
-            <label>Email:</label>
-            <input type="email" name="email" value="<?= htmlspecialchars($user['email']) ?>" required>
+                <label>Email:</label>
+                <input type="email" name="email" value="<?= htmlspecialchars($user['email']) ?>" required>
 
-            <label>Password:</label>
-            <input type="password" name="password" placeholder="Enter new password (optional)">
+                <label>Password:</label>
+                <input type="password" name="password" placeholder="Enter new password (optional)">
 
-            <label>Profile Picture:</label>
-            <input type="file" name="profilePicture" accept="image/*" onchange="previewImage(event)">
+                <label>Profile Picture:</label>
+                <input type="file" name="profilePicture" accept="image/*" onchange="previewImage(event)">
 
-            <button type="submit">Update Profile</button>
-        </form>
-    </div>
+                <button type="submit" class="btn-update">Update Profile</button>
+                <button type="submit">Update Profile</button>
+            </form>
+        </div>
     <?php endif; ?>
 </main>
 <script>

@@ -19,13 +19,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['verify'])) {
     } elseif (empty($code)) {
         $errors[] = 'Verification code is required.';
     } else {
-        // Retrieve the user's ID based on the email
+        //merr id e userit ne baze te emailit
         $stmt = $pdo->prepare('SELECT id FROM users WHERE email = :email');
         $stmt->execute(['email' => $email]);
         $user = $stmt->fetch();
 
         if ($user) {
-            // Fetch the verification code details from the verification_codes table
+            // Fetch detajet e verification code
             $stmt = $pdo->prepare('SELECT * FROM verification_codes WHERE id = :id AND status = :status');
             $stmt->execute([
                 'id' => $user['id'],
@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['verify'])) {
                 if ($currentTime > $verification['verificationCodeExpiration']) {
                     $errors[] = 'The verification code has expired. Please request a new code.';
                 } elseif ($verification['verificationCode'] === $code) {
-                    // Update the verification status in the verification_codes table
+                    // statusi do te behet verified
                     $stmt = $pdo->prepare('UPDATE verification_codes SET status = :status WHERE id = :id');
                     $stmt->execute([
                         'status' => 'verified',

@@ -215,5 +215,6 @@ include 'header.php';
 
 include 'footer.php';
 ?>
+<script src="timeout.js"></script>
 </body>
 </html>

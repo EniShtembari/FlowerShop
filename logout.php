@@ -11,10 +11,10 @@ if (isset($_COOKIE['remember_me'])) {
 }
 
 // Remove the token from the database
-if (isset($_SESSION['UserID'])) {
+if (isset($_SESSION['user_id'])) {
     $pdo = require __DIR__ . '/connect.php';
     $stmt = $pdo->prepare("UPDATE users SET rememberMe = NULL WHERE id = :id");
-    $stmt->execute([':id' => $_SESSION['UserID']]);
+    $stmt->execute([':id' => $_SESSION['user_id']]);
 }
 
 header('Location: index.php');
