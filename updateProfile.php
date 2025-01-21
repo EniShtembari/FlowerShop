@@ -31,7 +31,7 @@ if (!$user) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile Settings</title>
-    <link rel="stylesheet" href="myAccount.css">
+    <link rel="stylesheet" href="css/myAccount.css">
 </head>
 <body>
 <div class="profile-container">

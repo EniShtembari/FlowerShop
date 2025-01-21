@@ -212,9 +212,8 @@ include 'header.php';
     <?php endif; ?>
 </div>
 <?php
-
 include 'footer.php';
 ?>
-<script src="timeout.js"></script>
+<script src="js/timeout.js"></script>
 </body>
 </html>

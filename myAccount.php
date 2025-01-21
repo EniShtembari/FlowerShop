@@ -1,5 +1,5 @@
 <?php
-// Start session before ANY output
+
 session_start();
 
 // Check if user is logged in
@@ -8,7 +8,7 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-// Database connection
+
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -19,7 +19,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Fetch the current user's role
+
 $user_id = $_SESSION['user_id'];
 $query = "SELECT role FROM users WHERE id = ?";
 $stmt = $conn->prepare($query);
@@ -63,7 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $role !== 'admin') {
         move_uploaded_file($_FILES['profilePicture']['tmp_name'], "uploads/" . $profilePicture);
     }
 
-    // Prepare the query for updating user details
+
     $update_query = $conn->prepare(
         $password
             ? "UPDATE users SET firstName = ?, lastName = ?, email = ?, password = ?, profilePicture = ? WHERE id = ?"
@@ -82,7 +82,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $role !== 'admin') {
     exit();
 }
 
-// Fetch current user details for regular users
+
 if ($role !== 'admin') {
     $user_query = $conn->prepare("SELECT * FROM users WHERE id = ?");
     $user_query->bind_param("i", $user_id);
@@ -90,7 +90,7 @@ if ($role !== 'admin') {
     $user = $user_query->get_result()->fetch_assoc();
 }
 
-// Now include the header after all session and redirect logic
+
 include 'header.php';
 ?>
 <!DOCTYPE html>
@@ -98,10 +98,10 @@ include 'header.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!--<link rel="stylesheet" href="myAccount.css">-->
+
     <link rel="stylesheet" href="http://localhost/flowershop/myAccount.css">
-    <link rel="stylesheet" href="myAccount.css">
-    <link rel="stylesheet" href="myAccount.css">
+    <link rel="stylesheet" href="css/myAccount.css">
+    <link rel="stylesheet" href="css/myAccount.css">
     <title>My Account</title>
 
 </head>
@@ -146,7 +146,7 @@ include 'header.php';
                     </thead>
                     <tbody>
                     <?php
-                    // Fetch all users except the current admin
+
                     $user_query = "SELECT id, firstName, lastName, email, role FROM users WHERE id != ?";
                     $stmt = $conn->prepare($user_query);
                     $stmt->bind_param("i", $user_id);

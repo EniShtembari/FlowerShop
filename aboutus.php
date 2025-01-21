@@ -7,7 +7,7 @@ include 'header.php';
 <head>
     <meta charset="UTF-8">
     <title>Flower Shop</title>
-  <link rel="stylesheet" href="aboutus.css">
+  <link rel="stylesheet" href="css/aboutus.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" >
 </head>
 <body>
@@ -160,8 +160,8 @@ include 'header.php';
 
 
 
-<script src="about.js"></script>
-<script src="timeout.js"></script>
+<script src="js/about.js"></script>
+<script src="js/timeout.js"></script>
 <?php
 include 'footer.php';
 ?>

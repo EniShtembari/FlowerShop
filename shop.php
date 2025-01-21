@@ -1,7 +1,5 @@
 <?php
 session_start();
-
-// Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
     header("Location: index.php");
     exit;
@@ -14,16 +12,13 @@ $dbname = "flowershop";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
 $message = '';
 
-// Handle POST requests
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Handle delete product request
     if (isset($_POST['action']) && $_POST['action'] === 'delete') {
         $productID = $_POST['productID'];
 
@@ -40,7 +35,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->close();
         }
     }
-    // Handle update product request
     else {
         $productID = $_POST['productID'];
         $productName = $_POST['productName'];
@@ -81,7 +75,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Retrieve all products from the database
 $sql = "SELECT * FROM products";
 $result = $conn->query($sql);
 
@@ -89,8 +82,6 @@ $result = $conn->query($sql);
 ?>
 
 <?php
-// Include the footer file
-
 include 'header.php';
 ?>
 <!DOCTYPE html>
@@ -98,10 +89,10 @@ include 'header.php';
 <head>
     <meta charset="UTF-8">
     <title>Shop</title>
-    <link rel="stylesheet" href="http://localhost/FlowerShop/shop.css">
+    <link rel="stylesheet" href="css/shop.css">
     <link href="https://fonts.googleapis.com/css2?family=Diphylleia&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="http://localhost/FlowerShop/edit-container.css">
-    <link rel="stylesheet" href="http://localhost/FlowerShop/delete-product.css">
+    <link rel="stylesheet" href="css/edit-container.css">
+    <link rel="stylesheet" href="css/delete-product.css">
 </head>
 <body>
 
@@ -109,7 +100,7 @@ include 'header.php';
     <div class="content">
         <h1>Our Shop</h1>
         <?php if (!empty($message)) echo "<p>$message</p>"; ?>
-        <!-- Display success/error message -->
+
         <?php if (!empty($_SESSION['cart_message'])): ?>
             <div class="cart-message">
                 <p><?php echo htmlspecialchars($_SESSION['cart_message']); ?></p>
@@ -194,9 +185,8 @@ include 'header.php';
         <button type="submit" class="save-btn">💾 Save Changes</button>
     </form>
 </div>
-<script src="timeout.js"></script>
+<script src="js/timeout.js"></script>
 <?php
-// Include the footer file
 include 'footer.php';
 ?>
 </body>

@@ -15,7 +15,7 @@ if (!isset($_SESSION['user_id'])) {
     <!-- ======title====================== -->
     <title>HomePage</title>
     <!-- ======CSS====================== -->
-    <link rel="stylesheet" href="homepage.css">
+    <link rel="stylesheet" href="css/homepage.css">
     <!-- ======fav-icon====================== -->
     <link rel="shortcun icon" href="images/onTop.png">
     <!-- ===========import-poppins-font===== -->
@@ -400,31 +400,30 @@ if (!isset($_SESSION['user_id'])) {
 
 
         <!-- ===========script=======================-->
-        <script src="homepage.js"></script>
+<!--        <script src="js/homepage.js"></script>-->
         </div>
         <!-- ===========link======================-->
-        <div class="footer-link-box">
-            <strong>Main Link's</strong>
-            <ul>
-                <li><a href="homepage.php">Home</a></li>
-                <li><a href="aboutus.php">About</a></li>
-                <li><a href="shop.php">Shop</a></li>
-                <li><a href="#">Popular</a></li>
-                <li><a href="cart.php">Order</a></li>
-                <li><a href="#">Contact</a></li>
-            </ul>
-        </div>
+<!--        <div class="footer-link-box">-->
+<!--            <strong>Main Link's</strong>-->
+<!--            <ul>-->
+<!--                <li><a href="homepage.php">Home</a></li>-->
+<!--                <li><a href="aboutus.php">About</a></li>-->
+<!--                <li><a href="shop.php">Shop</a></li>-->
+<!--                <li><a href="#">Popular</a></li>-->
+<!--                <li><a href="cart.php">Order</a></li>-->
+<!--                <li><a href="#">Contact</a></li>-->
+<!--            </ul>-->
+<!--        </div>-->
     </div>
     <!-- ===========bottom======================-->
     <div class="footer-bottom">
         <span>Made From Web Dev. Group</span>
         <span>&copy; Copyright 2025 - Web Development</span>
     </div>
-</footer>
+</section>
 
 <!-- ===========script=======================-->
-<script src="homepage.js"></script>
-<script src="timeout.js"></script>
-
+<script src="js/homepage.js"></script>
+<script src="js/timeout.js"></script>
 </body>
 </html>

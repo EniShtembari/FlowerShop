@@ -10,7 +10,7 @@ body {
 }
 
 .shop {
-    background-image: url("composition/backgr.jpg");
+    background-image: url("../composition/backgr.jpg");
     background-size: cover;
     display: flex;
     align-items: center;

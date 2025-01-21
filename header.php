@@ -622,7 +622,6 @@
     </nav>
 </header>
 
-<script src="homepage.js"></script>
 
 <!-- ======== contact notification ============= -->
 <div class="contact-notification-box" id="notification">
@@ -634,6 +633,6 @@
 </div>
 
 <!-- ===========script=======================-->
-<script src="homepage.js"></script>
-<script src="timeout.js"></script>
+<script src="js/homepage.js"></script>
+<script src="js/timeout.js"></script>
 

@@ -29,7 +29,7 @@ body {
     align-items: center;
     padding: 20px;
     background-size: cover;
-    background: url('./images/1stPage.jpg') fixed center;
+    background: url('../images/1stPage.jpg') fixed center;
     position: relative;
 }
 

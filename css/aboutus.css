@@ -145,7 +145,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-image: url("composition/backflower.jpg");
+    background-image: url("../composition/backflower.jpg");
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     z-index: 1000;
@@ -197,7 +197,7 @@
 
 /*icon-section*/
 .icon-container {
-    background-image: url("composition/backgr.jpg");
+    background-image: url("../composition/backgr.jpg");
     display: flex;
     background-size: cover;
     justify-content: center;

@@ -77,7 +77,7 @@ include 'header.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="edit-user.css">
+    <link rel="stylesheet" href="css/edit-user.css">
     <title>Edit User</title>
 </head>
 <body>
@@ -128,7 +128,7 @@ include 'header.php';
         </form>
     </div>
 </main>
-<script src="timeout.js"></script>
+<script src="js/timeout.js"></script>
 <?php include 'footer.php';?>
 </body>
 </html>
