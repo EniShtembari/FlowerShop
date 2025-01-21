@@ -190,7 +190,7 @@ include 'header.php';
                 <input type="text" name="firstName" value="<?= htmlspecialchars($user['firstName']) ?>" required>
 
                 <label>Last Name:</label>
-                <input type="text" name="lastName" value="<?= htmlspecialchars($user['lastName']) ?>" required>
+                <input type="text" name="lastName" value="<?= htmlspecialchars($user['LastName']) ?>" required>
 
                 <label>Email:</label>
                 <input type="email" name="email" value="<?= htmlspecialchars($user['email']) ?>" required>
@@ -202,7 +202,6 @@ include 'header.php';
                 <input type="file" name="profilePicture" accept="image/*" onchange="previewImage(event)">
 
                 <button type="submit" class="btn-update">Update Profile</button>
-                <button type="submit">Update Profile</button>
             </form>
         </div>
     <?php endif; ?>

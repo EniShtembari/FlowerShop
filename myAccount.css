@@ -1,6 +1,3 @@
-/* myAccount.css */
-
-/* Ngjyrat e personalizuara */
 :root {
     --main-color: #ffd6dc;
     --main-light: #fdf0f2;
@@ -12,15 +9,12 @@
     --alert-danger-bg: #f8d7da;
     --alert-danger-border: #f5c6cb;
 }
-
-/* General styles for the main content */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f7f3f9; /* Light pink background */
+    background-color: #f7f3f9;
 }
-
 main {
     padding: 20px;
     max-width: 1200px;
@@ -29,15 +23,12 @@ main {
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
-
-/* Headings */
 h1, h2 {
-    color: #d5006d; /* Deep pink for headings */
+    color: #d5006d;
     text-align: center;
     margin-bottom: 20px;
 }
 
-/* Alerts */
 .alert {
     padding: 10px;
     border-radius: 4px;
@@ -47,22 +38,20 @@ h1, h2 {
 }
 
 .alert-success {
-    background-color: #f8d7e0; /* Light pink for success */
-    color: #d5006d; /* Deep pink text */
+    background-color: #f8d7e0;
+    color: #d5006d;
     border: 1px solid #f1b3d2;
 }
 
 .alert-danger {
-    background-color: #f8d7da; /* Light pink for error */
-    color: #d5006d; /* Deep pink text */
+    background-color: #f8d7da;
+    color: #d5006d;
     border: 1px solid #f1b3d2;
 }
 
-
-/* Stilimi i formës */
 form {
     margin: 50px auto;
-    max-width: 600px; /* Zgjeruar gjerësinë */
+    max-width: 600px;
     background: var(--main-light);
     border: 2px solid var(--main-color);
     border-radius: 10px;
@@ -83,7 +72,7 @@ form::before {
     filter: blur(10px);
 }
 
-/* Table styling */
+
 table {
     width: 100%;
     border-collapse: collapse;
@@ -93,7 +82,7 @@ table {
 }
 
 thead {
-    background-color: #f06292; /* Soft pink for table header */
+    background-color: #f06292;
     color: #fff;
 }
 
@@ -103,12 +92,12 @@ thead th {
 }
 
 tbody tr {
-    border-bottom: 1px solid #f1b3d2; /* Light pink border between rows */
+    border-bottom: 1px solid #f1b3d2;
     transition: background-color 0.2s;
 }
 
 tbody tr:hover {
-    background-color: #fce4ec; /* Lighter pink on row hover */
+    background-color: #fce4ec;
 }
 
 td {
@@ -235,7 +224,7 @@ form {
     /* Headings */
 
     h1, h2 {
-        color: #d5006d; /* Deep pink for headings */
+        color: #d5006d;
         text-align: center;
         margin-bottom: 20px;
     }
@@ -251,19 +240,18 @@ form {
     }
 
     .alert-success {
-        background-color: #f8d7e0; /* Light pink for success */
-        color: #d5006d; /* Deep pink text */
+        background-color: #f8d7e0;
+        color: #d5006d;
         border: 1px solid #f1b3d2;
     }
 
     .alert-danger {
-        background-color: #f8d7da; /* Light pink for error */
-        color: #d5006d; /* Deep pink text */
+        background-color: #f8d7da;
+        color: #d5006d;
         border: 1px solid #f1b3d2;
     }
 
     /* Table styling */
-
     table {
         width: 100%;
         border-collapse: collapse;
@@ -273,7 +261,7 @@ form {
     }
 
     thead {
-        background-color: #f06292; /* Soft pink for table header */
+        background-color: #f06292;
         color: #fff;
     }
 
@@ -283,12 +271,12 @@ form {
     }
 
     tbody tr {
-        border-bottom: 1px solid #f1b3d2; /* Light pink border between rows */
+        border-bottom: 1px solid #f1b3d2;
         transition: background-color 0.2s;
     }
 
     tbody tr:hover {
-        background-color: #fce4ec; /* Lighter pink on row hover */
+        background-color: #fce4ec;
     }
 
     td {
