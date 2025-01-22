@@ -1,10 +1,9 @@
 <?php
 session_start();
+global $pdo;
 // Lidhja me databazen
-$pdo = require __DIR__ . '/connect.php';
-if (!isset($pdo)) {
-    die('Database connection not established.');
-}
+require_once 'connect.php';
+
 
 // Inicializimi i variablave te erroreve
 $success_message = $_SESSION['success_message'] ?? null;

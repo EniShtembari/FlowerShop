@@ -4,7 +4,7 @@ session_start();
 require_once 'connect.php';
 
 if (!isset($_SESSION['email'])) {
-    echo "Session variable 'email' is not set.";
+    echo "Email is not set.";
     exit();
 }
 

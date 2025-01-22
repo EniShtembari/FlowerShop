@@ -23,19 +23,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errors['email'] = 'Invalid email format';
     }
-    if (empty($firstName) || empty($firstName)) {
+    if (empty($firstName)) {
         $errors['firstName'] = 'First name is required';
     }
-    if (empty($lastName) || empty($lastName)) {
+    if (empty($lastName)) {
         $errors['lastName'] = 'Last name is required';
     }
-    if (empty($email) || empty($email)) {
+    if (empty($email)) {
         $errors['email'] = 'Email is required';
     }
-    if (empty($password) || empty($password)) {
+    if (empty($password)) {
         $errors['password'] = 'Password is required';
     }
-    if (empty($confirmPassword) || empty($confirmPassword)) {
+    if (empty($confirmPassword)) {
         $errors['confirmPassword'] = 'Confirm password is required';
     }
     if (strlen($password) < 8) {
@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
         $errors['confirmPassword'] = 'Passwords do not match';
     }
 
-    // Check if email exists
+    // kontrollo nese emaili eshte ekzistent ne tabele
     $stmt = $pdo->prepare('SELECT * FROM users WHERE email = :email');
     $stmt->execute(['email' => $email]);
     if ($stmt->fetch()) {
