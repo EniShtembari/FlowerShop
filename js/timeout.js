@@ -1,4 +1,4 @@
-let inactivityTime = 900000; // 15 minuta ne milisekonda: 900000
+let inactivityTime = 900000; // 15 minuta ne milisekonda: 900 000
 let timeoutId;
 
 function resetTimer() {

@@ -6,14 +6,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const password = document.querySelector('input[name="password"]');
     const confirmPassword = document.querySelector('input[name="confirmPassword"]');
 
-    // Function to show error message
+    // shfaq errorin
     function showError(input, message) {
         const inputGroup = input.parentElement;
         const errorDiv = document.createElement('div');
         errorDiv.className = 'error-message';
         errorDiv.textContent = message;
 
-        // Remove any existing error message
+        // hiq errorin ekzistent
         const existingError = inputGroup.querySelector('.error-message');
         if (existingError) {
             existingError.remove();
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
         input.classList.add('error');
     }
 
-    // Funksioni per te hequr errorin
+    //hiq errorin kur perdoruesi rregullon gabimin
     function removeError(input) {
         const inputGroup = input.parentElement;
         const errorDiv = inputGroup.querySelector('.error-message');
@@ -89,22 +89,6 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             removeError(this);
         }
-    });
-
-    // shtypja e ikones se syrit te beje passwordin te dukshem
-    eyeIcons.forEach(icon => {
-        icon.addEventListener('click', function() {
-            const input = this.nextElementSibling;
-            if (input.type === 'password') {
-                input.type = 'text';
-                this.classList.remove('fa-eye');
-                this.classList.add('fa-eye-slash');
-            } else {
-                input.type = 'password';
-                this.classList.remove('fa-eye-slash');
-                this.classList.add('fa-eye');
-            }
-        });
     });
 
     // validimi i submit te formes

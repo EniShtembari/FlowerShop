@@ -1,19 +1,3 @@
-//  Animation for Icon Section
-const icons = document.querySelectorAll('.icons');
-icons.forEach(icon => {
-    icon.addEventListener('mouseenter', () => {
-        icon.style.transform = 'scale(1.1)';
-        icon.style.transition = 'transform 0.3s ease-in-out';
-
-    });
-    icon.addEventListener('mouseleave', () => {
-        icon.style.transform = 'scale(1)';
-    });
-});
-
-
-
-
 //  info window
 const learnMoreBtn = document.getElementById('learn-more');
 const infoWindow = document.getElementById('info-window');
